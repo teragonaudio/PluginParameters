@@ -121,6 +121,11 @@ The multithreaded mode must be enabled at compile-time like so:
 #include "PluginParameters.h"
 ```
 
+Some dependencies of the multithreaded implementation require C++11 support,
+so you may need to enable this for your compiler as necessary. Likewise, you
+will need to add `tinythread.cpp` to the list of files compiled by your
+project.
+
 When a `ThreadsafePluginParameterSet` (which should be used instead of the
 regular `PluginParameterSet`) is created by your plugin, it will create a new
 low-priority background thread for asynchronous parameter events.  This thread
