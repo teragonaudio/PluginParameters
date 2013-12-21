@@ -137,7 +137,7 @@ In multithreaded mode, you should directly modify parameter values. Instead,
 you must schedule changes via an event dispatcher. Therefore a full
 implementation would look something like this:
 
-(From plugin's audio processing code):
+In plugin's audio processing code:
 
 ```c++
 MyPlugin::MyPlugin() {
@@ -147,7 +147,6 @@ MyPlugin::MyPlugin() {
   this->parameters.add(new FrequencyParameter("Frequency", 20.0, 20000.0, 10000.0);
   this->parameters.add(new DecibelParameter("Gain", -60.0, 3.0, 0.0));
 }
-```
 
 void MyPlugin::process(float** inputs, float** outputs, long blocksize) {
   this->parameters.processRealtimeEvents();
@@ -171,7 +170,8 @@ void MyPlugin::getParameterDisplay(VstInt32 index, char* text) {
 }
 ```
 
-(From plugin's GUI code):
+In plugin's GUI code:
+
 ```c++
 // This code will be highly implementation-specific, but basically let's
 // assume that some GUI code is ready to set a parameter value after user
