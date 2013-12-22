@@ -112,7 +112,7 @@ static bool testCreateBoolParameter() {
   ASSERT_EQUALS(0.0, p.getScaledValue());
   ASSERT_STRING("test", p.getName());
   ASSERT_EQUALS(0.0, p.getDisplayValue());
-  ASSERT_STRING("false", p.getDisplayText());
+  ASSERT_STRING("Disabled", p.getDisplayText());
   ASSERT_STRING("test", p.getSafeName());
   return true;
 }
