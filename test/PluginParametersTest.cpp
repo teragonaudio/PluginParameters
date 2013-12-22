@@ -140,7 +140,7 @@ static bool testSetBoolParameterWithListener() {
 
 static bool testCreateDecibelParameter() {
   DecibelParameter p("test", -60.0, 3.0, 0.0);
-  ASSERT_EQUALS(0.707739, p.getScaledValue());
+  ASSERT_EQUALS(0.952381, p.getScaledValue());
   ASSERT_EQUALS(1.0, p.getValue());
   ASSERT_STRING("0.0 dB", p.getDisplayText());
   return true;
@@ -150,13 +150,13 @@ static bool testSetDecibelParameter() {
   DecibelParameter p("test", -60.0, 3.0, -10.0);
   ASSERT_STRING("-10.0 dB", p.getDisplayText());
   p.setValue(1.0);
-  ASSERT_EQUALS(0.707739, p.getScaledValue());
+  ASSERT_EQUALS(0.952381, p.getScaledValue());
   ASSERT_EQUALS(1.0, p.getValue());
   ASSERT_STRING("0.0 dB", p.getDisplayText());
   p.setScaledValue(0.5);
   ASSERT_EQUALS(0.5, p.getScaledValue());
-  ASSERT_EQUALS(0.706769, p.getValue());
-  ASSERT_STRING("-3.0 dB", p.getDisplayText());
+  ASSERT_EQUALS(0.037584, p.getValue());
+  ASSERT_STRING("-28.5 dB", p.getDisplayText());
   return true;
 }
 
