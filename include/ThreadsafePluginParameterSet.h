@@ -90,9 +90,13 @@ public:
      * likelihood of that event occurring. Thus, the recommended behavior is to
      * not schedule parameter changes directly after constructing the set.
      */
-    if(SLEEP_AFTER_CREATION_MS > 0) {
+#if SLEEP_AFTER_CREATION_MS
+#if WIN32
+      Sleep(SLEEP_AFTER_CREATION_MS);
+#else
       usleep(SLEEP_AFTER_CREATION_MS * 1000);
-    }
+#endif
+#endif
   }
 
   virtual ~ThreadsafePluginParameterSet() {
