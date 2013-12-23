@@ -51,7 +51,7 @@ public:
 protected:
 #endif
   virtual void setScaledValue(const ParameterValue inValue) { setValue(inValue); }
-  virtual void setValue(const ParameterValue inValue = 0.0) {
+  virtual void setValue(const ParameterValue = 0.0) {
     notifyObservers();
   }
 };

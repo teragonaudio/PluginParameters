@@ -235,7 +235,7 @@ public:
     return index < observers.size() ? observers.at(index) : NULL;
   }
 
-  virtual int getNumObservers() const { return observers.size(); }
+  virtual const size_t getNumObservers() const { return observers.size(); }
 
   /**
    * Remove an observer from the list of observers for this parameter. If you do not call

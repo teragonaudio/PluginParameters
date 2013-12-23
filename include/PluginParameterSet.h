@@ -38,7 +38,7 @@ public:
 
   virtual ~PluginParameterSet() {
     // Delete all parameters added to the set
-    for(int i = 0; i < size(); i++) {
+    for(size_t i = 0; i < size(); i++) {
       delete parameterList.at(i);
     }
   }
@@ -65,7 +65,7 @@ public:
   /**
    * @return Number of parameters in the set
    */
-  virtual const int size() const { return parameterList.size(); }
+  virtual const size_t size() const { return parameterList.size(); }
 
 
   virtual void clear() {

@@ -65,7 +65,7 @@ public:
         }
 
         // Notify all observers of the same type
-        for(int i = 0; i < event->parameter->getNumObservers(); ++i) {
+        for(size_t i = 0; i < event->parameter->getNumObservers(); ++i) {
           PluginParameterObserver* observer = event->parameter->getObserver(i);
           if(observer != NULL &&
              observer->isRealtimePriority() == isRealtime &&
