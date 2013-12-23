@@ -275,6 +275,12 @@ protected:
   virtual const int getDisplayPrecision() const { return precision; }
 
 private:
+  // Disallow assignment operator. It doesn't really make sense to try
+  // to assign one parameter to another, and if this is allowed then we
+  // must drop the const several fields.
+  PluginParameter& operator=(const PluginParameter&) {}
+
+private:
   ParameterString name;
   ParameterString unit;
   const ParameterValue minValue;

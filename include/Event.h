@@ -45,6 +45,10 @@ public:
   const ParameterValue value;
   bool isRealtime;
   const PluginParameterObserver* sender;
+
+private:
+  // Disallow assignment operator
+  Event& operator=(const Event&) {}
 };
 
 class ScaledEvent : public Event {
