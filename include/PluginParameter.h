@@ -278,7 +278,7 @@ private:
   // Disallow assignment operator. It doesn't really make sense to try
   // to assign one parameter to another, and if this is allowed then we
   // must drop the const several fields.
-  PluginParameter& operator=(const PluginParameter&) {}
+  PluginParameter& operator=(const PluginParameter&) { return *this; }
 
 private:
   ParameterString name;

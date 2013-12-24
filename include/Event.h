@@ -48,7 +48,7 @@ public:
 
 private:
   // Disallow assignment operator
-  Event& operator=(const Event&) {}
+  Event& operator=(const Event&) { return *this; }
 };
 
 class ScaledEvent : public Event {
