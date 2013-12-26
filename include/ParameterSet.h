@@ -33,9 +33,18 @@
 namespace teragon {
 
 class ParameterSet {
+#if PLUGINPARAMETERS_MULTITHREADED
+    // For the multi-threaded implementation, forbid direct instantiation of
+    // a ParameterSet, forcing the caller to use ConcurrentParameterSet instead.
+protected:
+#else
 public:
+#endif
     explicit ParameterSet() {}
 
+#if PLUGINPARAMETERS_MULTITHREADED
+public:
+#endif
     virtual ~ParameterSet() {
         // Delete all parameters added to the set
         for(size_t i = 0; i < size(); i++) {
