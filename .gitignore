@@ -11,6 +11,10 @@ pluginparameterstest.exe
 
 # Test output
 test/out/*
+Debug/*
+test/Debug/*
+Release/*
+test/Release/*
 
 # Stuff from various IDE's
 .idea/*
