@@ -123,9 +123,53 @@ public:
         s.set(p, true);
         while(!p->getValue()) {
             s.processRealtimeEvents();
-            usleep(1000 * SLEEP_TIME_PER_BLOCK_MS);
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
         }
         ASSERT(p->getValue());
+        return true;
+    }
+
+    static bool testThreadsafeSetParameterWithNameAsync() {
+        ConcurrentParameterSet s;
+        Parameter *p = s.add(new BooleanParameter("test"));
+        ASSERT_NOT_NULL(p);
+        ASSERT_FALSE(p->getValue());
+        s.set("test", true);
+        while(!p->getValue()) {
+            s.processRealtimeEvents();
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
+        }
+        ASSERT(p->getValue());
+        return true;
+    }
+
+    static bool testThreadsafeSetParameterWithIndexAsync() {
+        ConcurrentParameterSet s;
+        Parameter *p = s.add(new BooleanParameter("test"));
+        ASSERT_NOT_NULL(p);
+        ASSERT_FALSE(p->getValue());
+        s.set((size_t)0, true);
+        while(!p->getValue()) {
+            s.processRealtimeEvents();
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
+        }
+        ASSERT(p->getValue());
+        return true;
+    }
+
+    static bool testThreadsafeSetParameterWithInvalidNameAsync() {
+        ConcurrentParameterSet s;
+        Parameter *p = s.add(new BooleanParameter("test"));
+        ASSERT_NOT_NULL(p);
+        ASSERT_FALSE(p->getValue());
+        s.set("invalid", true);
+        int retries = TEST_NUM_BLOCKS_TO_PROCESS;
+        while(!p->getValue() && retries-- > 0) {
+            s.processRealtimeEvents();
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
+        }
+        // Should silently fail (PluginParameters does not throw, and set returns void).
+        ASSERT_FALSE(p->getValue());
         return true;
     }
 
@@ -135,10 +179,79 @@ public:
         s.add(p);
         ASSERT_NOT_NULL(p);
         ASSERT_STRING("", p->getDisplayText());
-        s.setData(p, "hello");
+        const char *data = "hello";
+        s.setData(p, data, sizeof(data));
         while(p->getDisplayText() == "") {
             s.processRealtimeEvents();
-            usleep(1000 * SLEEP_TIME_PER_BLOCK_MS);
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
+        }
+        ASSERT_STRING("hello", p->getDisplayText());
+        return true;
+    }
+
+    static bool testThreadsafeSetDataParameterWithNameAsync() {
+        ConcurrentParameterSet s;
+        StringParameter *p = new StringParameter("test");
+        s.add(p);
+        ASSERT_NOT_NULL(p);
+        ASSERT_STRING("", p->getDisplayText());
+        const char *data = "hello";
+        s.setData("test", data, sizeof(data));
+        while(p->getDisplayText() == "") {
+            s.processRealtimeEvents();
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
+        }
+        ASSERT_STRING("hello", p->getDisplayText());
+        return true;
+    }
+
+    static bool testThreadsafeSetDataParameterWithIndexAsync() {
+        ConcurrentParameterSet s;
+        StringParameter *p = new StringParameter("test");
+        s.add(p);
+        ASSERT_NOT_NULL(p);
+        ASSERT_STRING("", p->getDisplayText());
+        const char *data = "hello";
+        s.setData((size_t)0, data, sizeof(data));
+        while(p->getDisplayText() == "") {
+            s.processRealtimeEvents();
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
+        }
+        ASSERT_STRING("hello", p->getDisplayText());
+        return true;
+    }
+
+    static bool testThreadsafeSetDataParameterWithInvalidNameAsync() {
+        ConcurrentParameterSet s;
+        StringParameter *p = new StringParameter("test");
+        s.add(p);
+        ASSERT_NOT_NULL(p);
+        ASSERT_STRING("", p->getDisplayText());
+        const char *data = "hello";
+        s.setData("invalid", data, sizeof(data));
+        int retries = TEST_NUM_BLOCKS_TO_PROCESS;
+        while(p->getDisplayText() == "" && retries-- > 0) {
+            s.processRealtimeEvents();
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
+        }
+        // Should silently fail (PluginParameters does not throw, and set returns void).
+        ASSERT_STRING("", p->getDisplayText());
+        return true;
+    }
+
+    static bool testThreadsafeSetDataParameterAsyncForceFree() {
+        ConcurrentParameterSet s;
+        StringParameter *p = new StringParameter("test");
+        s.add(p);
+        ASSERT_NOT_NULL(p);
+        ASSERT_STRING("", p->getDisplayText());
+        char *data = new char[6];
+        memcpy(data, "hello\0", 6);
+        s.setData(p, data, sizeof(data));
+        free(data);
+        while(p->getDisplayText() == "") {
+            s.processRealtimeEvents();
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
         }
         ASSERT_STRING("hello", p->getDisplayText());
         return true;
@@ -156,7 +269,7 @@ public:
         s.set(p, true);
         for(int i = 0; i < TEST_NUM_BLOCKS_TO_PROCESS; i++) {
             s.processRealtimeEvents();
-            usleep(1000 * SLEEP_TIME_PER_BLOCK_MS);
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
         }
         ASSERT(p->getValue());
         ASSERT_INT_EQUALS(1, realtimeObserver.count);
@@ -178,7 +291,7 @@ public:
         s.set(p, true);
         for(int i = 0; i < TEST_NUM_BLOCKS_TO_PROCESS; i++) {
             s.processRealtimeEvents();
-            usleep(1000 * SLEEP_TIME_PER_BLOCK_MS);
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
         }
         ASSERT(p->getValue());
         ASSERT_INT_EQUALS(1, realtimeObserver.count);
@@ -198,7 +311,7 @@ public:
         s.set(p, true, &asyncObserver);
         for(int i = 0; i < TEST_NUM_BLOCKS_TO_PROCESS; i++) {
             s.processRealtimeEvents();
-            usleep(1000 * SLEEP_TIME_PER_BLOCK_MS);
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
         }
         ASSERT(p->getValue());
         ASSERT_INT_EQUALS(1, realtimeObserver.count);
@@ -218,18 +331,25 @@ using namespace teragon;
 
 int main(int argc, char *argv[]) {
     gNumFailedTests = 0;
-    const int numIterations = 20;
+    const int numIterations = 2000;
 
     // Run the tests several times, which increases the probability of exposing
     // race conditions or other multithreaded bugs. Note that even by doing this,
     // we cannot guarantee with 100% certainty that race conditions do not exist.
     // Gotta love concurrent programming. :)
-    for(int i = 0; i < numIterations; i++) {
+    for(int i = 0; i < numIterations && gNumFailedTests == 0; i++) {
         printf("Running tests, iteration %d/%d:\n", i, numIterations);    
         ADD_TEST(_Tests::testCreateConcurrentParameterSet());
         ADD_TEST(_Tests::testCreateManyConcurrentParameterSets());
         ADD_TEST(_Tests::testThreadsafeSetParameterAsync());
+        ADD_TEST(_Tests::testThreadsafeSetParameterWithNameAsync());
+        ADD_TEST(_Tests::testThreadsafeSetParameterWithIndexAsync());
+        ADD_TEST(_Tests::testThreadsafeSetParameterWithInvalidNameAsync());
         ADD_TEST(_Tests::testThreadsafeSetDataParameterAsync());
+        ADD_TEST(_Tests::testThreadsafeSetDataParameterWithNameAsync());
+        ADD_TEST(_Tests::testThreadsafeSetDataParameterWithIndexAsync());
+        ADD_TEST(_Tests::testThreadsafeSetDataParameterWithInvalidNameAsync());
+        ADD_TEST(_Tests::testThreadsafeSetDataParameterAsyncForceFree());
         ADD_TEST(_Tests::testThreadsafeSetParameterRealtime());
         ADD_TEST(_Tests::testThreadsafeSetParameterBothThreadsFromAsync());
         ADD_TEST(_Tests::testThreadsafeSetParameterBothThreadsFromRealtime());
