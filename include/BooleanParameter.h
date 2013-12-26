@@ -42,14 +42,6 @@ public:
         return value ? "Enabled" : "Disabled";
     }
 
-    virtual const ParameterValue getDisplayValue() const {
-        return getValue();
-    }
-
-    virtual void setDisplayValue(const ParameterValue inValue) {
-        setValue(inValue);
-    }
-
     virtual const ParameterValue getScaledValue() const {
         return getValue();
     }
