@@ -276,14 +276,14 @@ static bool testCreateParameterWithBadRange() {
 }
 
 static bool testCreateParameterSet() {
-  PluginParameterSet s;
+  ParameterSet s;
   // Really just a basic sanity check
   ASSERT_INT_EQUALS(0, s.size());
   return true;
 }
 
 static bool testAddParameterToSet() {
-  PluginParameterSet s;
+  ParameterSet s;
   Parameter * _p1;
   Parameter * _p2;
 
@@ -300,7 +300,7 @@ static bool testAddParameterToSet() {
 }
 
 static bool testAddNullParameterToSet() {
-  PluginParameterSet s;
+  ParameterSet s;
   ASSERT_IS_NULL(s.add(NULL));
   ASSERT_INT_EQUALS(0, s.size());
   return true;
@@ -308,7 +308,7 @@ static bool testAddNullParameterToSet() {
 
 static bool testAddDuplicateParameterToSet() {
   BooleanParameter *p = new BooleanParameter("test");
-  PluginParameterSet s;
+  ParameterSet s;
   ASSERT_NOT_NULL(s.add(p));
   ASSERT_IS_NULL(s.add(p));
   ASSERT_INT_EQUALS(1, s.size());
@@ -316,7 +316,7 @@ static bool testAddDuplicateParameterToSet() {
 }
 
 static bool testAddDuplicateSafeNameParameterToSet() {
-  PluginParameterSet s;
+  ParameterSet s;
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter1")));
   ASSERT_IS_NULL(s.add(new BooleanParameter("Parameter 1")));
   ASSERT_INT_EQUALS(1, s.size());
@@ -324,7 +324,7 @@ static bool testAddDuplicateSafeNameParameterToSet() {
 }
 
 static bool testClearParameterSet() {
-  PluginParameterSet s;
+  ParameterSet s;
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter1")));
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter2")));
   ASSERT_INT_EQUALS(2, s.size());
@@ -334,7 +334,7 @@ static bool testClearParameterSet() {
 }
 
 static bool testGetParameterByName() {
-  PluginParameterSet s;
+  ParameterSet s;
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 1")));
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 2")));
   ASSERT_INT_EQUALS(2, s.size());
@@ -345,7 +345,7 @@ static bool testGetParameterByName() {
 }
 
 static bool testGetParameterByIndex() {
-  PluginParameterSet s;
+  ParameterSet s;
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 1")));
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 2")));
   ASSERT_INT_EQUALS(2, s.size());
@@ -354,7 +354,7 @@ static bool testGetParameterByIndex() {
 }
 
 static bool testGetParameterByNameOperator() {
-  PluginParameterSet s;
+  ParameterSet s;
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 1")));
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 2")));
   ASSERT_INT_EQUALS(2, s.size());
@@ -363,7 +363,7 @@ static bool testGetParameterByNameOperator() {
 }
 
 static bool testGetParameterByIndexOperator() {
-  PluginParameterSet s;
+  ParameterSet s;
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 1")));
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 2")));
   ASSERT_INT_EQUALS(2, s.size());

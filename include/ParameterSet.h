@@ -32,11 +32,11 @@
 
 namespace teragon {
 
-class PluginParameterSet {
+class ParameterSet {
 public:
-  explicit PluginParameterSet() {}
+  explicit ParameterSet() {}
 
-  virtual ~PluginParameterSet() {
+  virtual ~ParameterSet() {
     // Delete all parameters added to the set
     for(size_t i = 0; i < size(); i++) {
       delete parameterList.at(i);

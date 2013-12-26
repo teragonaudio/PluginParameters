@@ -36,7 +36,7 @@
 #include "FrequencyParameter.h"
 #include "IntegerParameter.h"
 #include "StringParameter.h"
-#include "PluginParameterSet.h"
+#include "ParameterSet.h"
 #include "VoidParameter.h"
 
 #if ENABLE_MULTITHREADED

@@ -27,7 +27,7 @@
 #define __ThreadsafePluginParameterSet_h__
 
 #if ENABLE_MULTITHREADED
-#include "PluginParameterSet.h"
+#include "ParameterSet.h"
 #include "Parameter.h"
 #include "EventDispatcher.h"
 
@@ -55,18 +55,18 @@ static void asyncDispatcherCallback(void *arg) {
   }
 }
 
-class ThreadsafePluginParameterSet : public PluginParameterSet, public EventScheduler {
+class ThreadsafePluginParameterSet : public ParameterSet, public EventScheduler {
 public:
   /**
    * Create a new parameter set which can be used by multiple threads. This
    * assumes that there is one high-priority thread which is executed from a
    * runloop, and one or more low-priority threads for background tasks or GUI.
    *
-   * Simply using this class in place of PluginParameterSet does not guarantee
+   * Simply using this class in place of ParameterSet does not guarantee
    * thread-safe code. See the top-level README for information and examples
    * regarding correct usage of this class.
    */
-  explicit ThreadsafePluginParameterSet() : PluginParameterSet(), EventScheduler(),
+  explicit ThreadsafePluginParameterSet() : ParameterSet(), EventScheduler(),
     asyncDispatcher(this, false), realtimeDispatcher(this, true),
     asyncDispatcherThread(asyncDispatcherCallback, &asyncDispatcher) {
     asyncDispatcherThread.set_name("PluginParameterSetScheduler");
