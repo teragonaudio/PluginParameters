@@ -17,6 +17,8 @@ Release/*
 test/Release/*
 
 # Stuff from various IDE's
+*.build
+test/*.build
 .idea/*
 *.xcodeproj
 *.perspectivev3
