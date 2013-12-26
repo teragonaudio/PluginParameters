@@ -82,8 +82,10 @@ public:
 class _Tests {
 public:
     static bool testCreateConcurrentParameterSet() {
-        ConcurrentParameterSet s;
-        ASSERT_SIZE_EQUALS((size_t)0, s.size());
+        ConcurrentParameterSet *s = new ConcurrentParameterSet();
+        ASSERT_SIZE_EQUALS((size_t)0, s->size());
+        ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
+        delete s;
         return true;
     }
 
