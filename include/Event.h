@@ -73,16 +73,25 @@ public:
     DataEvent(DataParameter *p, const void *inData, const size_t inDataSize,
               bool realtime = false, ParameterObserver *s = NULL) :
     Event(dynamic_cast<Parameter *>(p), 0, realtime, s),
-    dataParameter(p), dataValue(inData), dataSize(inDataSize) {}
+    dataParameter(p), dataValue(NULL), dataSize(inDataSize) {
+        if(inDataSize > 0 && inData != NULL) {
+            dataValue = malloc(inDataSize);
+            memcpy(dataValue, inData, inDataSize);
+        }
+    }
 
-    virtual ~DataEvent() {}
+    virtual ~DataEvent() {
+        if(dataValue != NULL) {
+            free(dataValue);
+        }
+    }
 
     virtual void apply() {
         dataParameter->setValue(dataValue, dataSize);
     }
 
     DataParameter *dataParameter;
-    const void *dataValue;
+    void *dataValue;
     const size_t dataSize;
 };
 

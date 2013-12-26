@@ -247,7 +247,7 @@ public:
      *               observers.
      */
     virtual void setData(const ParameterString &name, const void *data,
-                         const size_t dataSize = 0, ParameterObserver *sender = NULL) {
+                         const size_t dataSize, ParameterObserver *sender = NULL) {
         Parameter *parameter = get(name);
         if(parameter != NULL) {
             setData(parameter, data, dataSize, sender);
@@ -273,7 +273,7 @@ public:
      *               observers.
      */
     virtual void setData(const size_t index, const void *data,
-                         const size_t dataSize = 0, ParameterObserver *sender = NULL) {
+                         const size_t dataSize, ParameterObserver *sender = NULL) {
         return setData(parameterList.at(index), data, dataSize, sender);
     }
 
