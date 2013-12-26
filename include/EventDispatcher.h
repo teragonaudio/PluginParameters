@@ -56,7 +56,7 @@ class EventDispatcher {
 #if PLUGINPARAMETERS_MULTITHREADED
 public:
     EventDispatcher(EventScheduler *s, bool realtime) :
-    eventQueue(), scheduler(s), isRealtime(realtime), killed(false) {}
+    eventQueue(), scheduler(s), isRealtime(realtime), started(false), killed(false) {}
 
     virtual ~EventDispatcher() {}
 
@@ -98,12 +98,19 @@ public:
         }
     }
 
-    bool isKilled() const {
+    volatile bool isStarted() const {
+        return started;
+    }
+
+    void start() {
+        started = true;
+    }
+
+    volatile bool isKilled() const {
         return killed;
     }
 
     void kill() {
-        EventDispatcherLockGuard guard(mutex);
         killed = true;
         notify();
     }
@@ -127,6 +134,7 @@ private:
 
     EventScheduler *scheduler;
     const bool isRealtime;
+    volatile bool started;
     volatile bool killed;
 
 #endif // PLUGINPARAMETERS_MULTITHREADED

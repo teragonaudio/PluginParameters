@@ -30,17 +30,20 @@
 #include "Parameter.h"
 #include "EventDispatcher.h"
 
-#ifndef SLEEP_AFTER_CREATION_MS
-#define SLEEP_AFTER_CREATION_MS 0
-#endif
-
 namespace teragon {
 
 #if PLUGINPARAMETERS_MULTITHREADED
 static void asyncDispatcherCallback(void *arg) {
     EventDispatcher *dispatcher = reinterpret_cast<EventDispatcher *>(arg);
-    EventDispatcherLockGuard guard(dispatcher->getMutex());
+    dispatcher->start();
+
     while(!dispatcher->isKilled()) {
+        // WARNING: Deadlock can occur here
+        // If this thread is interrupted between these two lines, and the main thread
+        // exits (ie, the ConcurrentParameterSet is destroyed directly after creation),
+        // then the corresponding notify() call thrown by kill() will not be received.
+        // To avoid this problem, you should not destroy a ConcurrentParameterSet right
+        // after creating it.
         dispatcher->wait();
         // This thread can be notified both in case of an event callback or when the
         // thread should join and exit. In the second case, we should not attempt to
@@ -67,34 +70,13 @@ public:
     explicit ConcurrentParameterSet() : ParameterSet(), EventScheduler(),
     asyncDispatcher(this, false), realtimeDispatcher(this, true),
     asyncDispatcherThread(asyncDispatcherCallback, &asyncDispatcher) {
-        asyncDispatcherThread.set_name("PluginParameterSetScheduler");
-        asyncDispatcherThread.detach();
+        asyncDispatcherThread.set_name("PluginParametersAsyncDispatcher");
         asyncDispatcherThread.set_low_priority();
 
-        /*
-         * It is very difficult to guarantee that the async callback thread will be
-         * ready and waiting on the condition variable by the time this constructor
-         * exits, at least without forcing scheduleEvent() to have a mutex.
-         *
-         * Therefore scheduling parameter changes from the async thread immediately
-         * after constructing the set may result in these events not being applied.
-         * This effectively means that sending such events after construction is NOT
-         * recommended. However if you absolutely need this (and do you, really?),
-         * then you can define SLEEP_AFTER_CREATION_MS to some non-zero value to
-         * allow time for the async thread to finish initializing.
-         *
-         * However, is is always the case with sleeping code, this is NOT guaranteed
-         * to allow one to schedule async events right away, it just reduces the
-         * likelihood of that event occurring. Thus, the recommended behavior is to
-         * not schedule parameter changes directly after constructing the set.
-         */
-#if SLEEP_AFTER_CREATION_MS
-#if WIN32
-      Sleep(SLEEP_AFTER_CREATION_MS);
-#else
-        usleep(SLEEP_AFTER_CREATION_MS * 1000);
-#endif
-#endif
+        // Wait for the async dispatcher thread to be fully started.
+        while(!asyncDispatcher.isStarted()) {
+            sleep(10);
+        }
     }
 
     virtual ~ConcurrentParameterSet() {
@@ -279,22 +261,38 @@ public:
      * small delay before other async observers receive their notifications.
      *
      * @param parameter Parameter
-     * @param value New string value
+     * @param value New data value
+     * @param dataSize Data size, in bytes
      * @param sender Sending object (can be NULL). If non-NULL, then this object
      *               will *not* receive notifications on the observer callback,
      *               since presumably this object is pushing state to other
      *               observers.
      */
     virtual void setData(Parameter *parameter, const void *data,
-                         const size_t dataSize = 0, ParameterObserver *sender = NULL) {
+                         const size_t dataSize, ParameterObserver *sender = NULL) {
         DataParameter *dataParameter = dynamic_cast<DataParameter *>(parameter);
         if(dataParameter != NULL) {
             scheduleEvent(new DataEvent(dataParameter, data, dataSize, true, sender));
         }
     }
 
+    static void sleep(const unsigned long milliseconds) {
+#if WIN32
+        Sleep(milliseconds);
+#else
+        usleep(((useconds_t)milliseconds * 1000));
+#endif
+    }
+
 protected:
     virtual void scheduleEvent(Event *event) {
+        if(!asyncDispatcher.isStarted()) {
+            return;
+        }
+        else if(asyncDispatcher.isKilled()) {
+            return;
+        }
+
         if(event->isRealtime) {
             realtimeDispatcher.add(event);
         }

@@ -27,7 +27,6 @@
 
 // Force multi-threaded build
 #define PLUGINPARAMETERS_MULTITHREADED 1
-#define SLEEP_AFTER_CREATION_MS 100
 #include "PluginParameters.h"
 #include "TestRunner.h"
 
@@ -96,6 +95,10 @@ public:
             fflush(stdout);
             ConcurrentParameterSet *s = new ConcurrentParameterSet();
             ASSERT_SIZE_EQUALS((size_t)0, s->size());
+            // Sleep a bit to avoid a rare (but still ever-present) deadlock problem which
+            // can occur by destroying a ConcurrentParameterSet before the asynchronous event
+            // thread has been fully started.
+            ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
             delete s;
         }
         return true;
