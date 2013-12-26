@@ -123,10 +123,6 @@ public:
         waitLock.wait(mutex);
     }
 
-    EventDispatcherMutex &getMutex() {
-        return mutex;
-    }
-
 private:
     tthread::condition_variable waitLock;
     EventDispatcherMutex mutex;
