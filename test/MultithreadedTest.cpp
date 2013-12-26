@@ -179,8 +179,8 @@ public:
         s.add(p);
         ASSERT_NOT_NULL(p);
         ASSERT_STRING("", p->getDisplayText());
-        const char *data = "hello";
-        s.setData(p, data, sizeof(data));
+        const char *data = "hello\0";
+        s.setData(p, data, 6);
         while(p->getDisplayText() == "") {
             s.processRealtimeEvents();
             ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
@@ -195,8 +195,8 @@ public:
         s.add(p);
         ASSERT_NOT_NULL(p);
         ASSERT_STRING("", p->getDisplayText());
-        const char *data = "hello";
-        s.setData("test", data, sizeof(data));
+        const char *data = "hello\0";
+        s.setData("test", data, 6);
         while(p->getDisplayText() == "") {
             s.processRealtimeEvents();
             ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
@@ -211,8 +211,8 @@ public:
         s.add(p);
         ASSERT_NOT_NULL(p);
         ASSERT_STRING("", p->getDisplayText());
-        const char *data = "hello";
-        s.setData((size_t)0, data, sizeof(data));
+        const char *data = "hello\0";
+        s.setData((size_t)0, data, 6);
         while(p->getDisplayText() == "") {
             s.processRealtimeEvents();
             ConcurrentParameterSet::sleep(SLEEP_TIME_PER_BLOCK_MS);
@@ -227,8 +227,8 @@ public:
         s.add(p);
         ASSERT_NOT_NULL(p);
         ASSERT_STRING("", p->getDisplayText());
-        const char *data = "hello";
-        s.setData("invalid", data, sizeof(data));
+        const char *data = "hello\0";
+        s.setData("invalid", data, 6);
         int retries = TEST_NUM_BLOCKS_TO_PROCESS;
         while(p->getDisplayText() == "" && retries-- > 0) {
             s.processRealtimeEvents();
@@ -246,8 +246,9 @@ public:
         ASSERT_NOT_NULL(p);
         ASSERT_STRING("", p->getDisplayText());
         char *data = new char[6];
-        memcpy(data, "hello\0", 6);
-        s.setData(p, data, sizeof(data));
+        memset(data, 0, 6);
+        memcpy(data, "hello", 6);
+        s.setData(p, data, 6);
         free(data);
         while(p->getDisplayText() == "") {
             s.processRealtimeEvents();
