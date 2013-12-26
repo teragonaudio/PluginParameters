@@ -24,7 +24,8 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
+
+// Must be included before PluginParameters.h
 #include "TestRunner.h"
 #include "PluginParameters.h"
 
@@ -101,7 +102,7 @@ public:
     }
 
     void onParameterUpdated(const Parameter *parameter) {
-        value = parameter->getValue();
+        value = parameter->getValue() > 0.5;
     }
 
     bool value;
@@ -295,14 +296,14 @@ public:
     static bool testCreateParameterWithBadRange() {
         // NOTE: This test will also succeed, PluginParameters doesn't check for bad ranges
         // Just be aware of this behavior rather than trying to abuse the library.
-        IntegerParameter p("bad", 100.0, 0.0, 300.0);
+        IntegerParameter p("bad", 100, 0, 300);
         return true;
     }
 
     static bool testCreateParameterSet() {
         ParameterSet s;
         // Really just a basic sanity check
-        ASSERT_INT_EQUALS(0, s.size());
+        ASSERT_SIZE_EQUALS((size_t)0, s.size());
         return true;
     }
 
@@ -315,7 +316,7 @@ public:
         ASSERT_NOT_NULL(_p1);
         _p2 = s.add(new BooleanParameter("Parameter 2"));
         ASSERT_NOT_NULL(_p2);
-        ASSERT_INT_EQUALS(2, s.size());
+        ASSERT_SIZE_EQUALS(2ul, s.size());
         ASSERT_STRING("Parameter 1", s.get(0)->getName());
         ASSERT_STRING("Parameter 1", _p1->getName());
         ASSERT_STRING("Parameter 2", s.get(1)->getName());
@@ -326,7 +327,7 @@ public:
     static bool testAddNullParameterToSet() {
         ParameterSet s;
         ASSERT_IS_NULL(s.add(NULL));
-        ASSERT_INT_EQUALS(0, s.size());
+        ASSERT_SIZE_EQUALS((size_t)0, s.size());
         return true;
     }
 
@@ -335,7 +336,7 @@ public:
         ParameterSet s;
         ASSERT_NOT_NULL(s.add(p));
         ASSERT_IS_NULL(s.add(p));
-        ASSERT_INT_EQUALS(1, s.size());
+        ASSERT_SIZE_EQUALS(1ul, s.size());
         return true;
     }
 
@@ -343,7 +344,7 @@ public:
         ParameterSet s;
         ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter1")));
         ASSERT_IS_NULL(s.add(new BooleanParameter("Parameter 1")));
-        ASSERT_INT_EQUALS(1, s.size());
+        ASSERT_SIZE_EQUALS(1ul, s.size());
         return true;
     }
 
@@ -351,9 +352,9 @@ public:
         ParameterSet s;
         ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter1")));
         ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter2")));
-        ASSERT_INT_EQUALS(2, s.size());
+        ASSERT_SIZE_EQUALS(2ul, s.size());
         s.clear();
-        ASSERT_INT_EQUALS(0, s.size());
+        ASSERT_SIZE_EQUALS((size_t)0, s.size());
         return true;
     }
 
@@ -361,7 +362,7 @@ public:
         ParameterSet s;
         ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 1")));
         ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 2")));
-        ASSERT_INT_EQUALS(2, s.size());
+        ASSERT_SIZE_EQUALS(2ul, s.size());
         Parameter *pe = s.get("Parameter 2");
         ASSERT_NOT_NULL(pe);
         ASSERT_STRING("Parameter 2", pe->getName());
@@ -372,7 +373,7 @@ public:
         ParameterSet s;
         ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 1")));
         ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 2")));
-        ASSERT_INT_EQUALS(2, s.size());
+        ASSERT_SIZE_EQUALS(2ul, s.size());
         ASSERT_STRING("Parameter 2", s.get(1)->getName());
         return true;
     }
@@ -381,7 +382,7 @@ public:
         ParameterSet s;
         ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 1")));
         ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 2")));
-        ASSERT_INT_EQUALS(2, s.size());
+        ASSERT_SIZE_EQUALS(2ul, s.size());
         ASSERT_STRING("Parameter 2", s["Parameter 2"]->getName());
         return true;
     }
@@ -390,7 +391,7 @@ public:
         ParameterSet s;
         ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 1")));
         ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 2")));
-        ASSERT_INT_EQUALS(2, s.size());
+        ASSERT_SIZE_EQUALS(2ul, s.size());
         ASSERT_STRING("Parameter 2", s[1]->getName());
         return true;
     }
@@ -481,15 +482,17 @@ public:
 #if PLUGINPARAMETERS_MULTITHREADED
     static bool testCreateConcurrentParameterSet() {
         ConcurrentParameterSet s;
-        ASSERT_INT_EQUALS(0, s.size());
+        ASSERT_SIZE_EQUALS((size_t)0, s.size());
         return true;
     }
 
     static bool testCreateManyConcurrentParameterSets() {
         // Attempt to expose bugs caused by fast-exiting threads
+        printf("\nCreating sets");
         for(int i = 0; i < 100; i++) {
+            printf(".");
             ConcurrentParameterSet *s = new ConcurrentParameterSet();
-            ASSERT_INT_EQUALS(0, s->size());
+            ASSERT_SIZE_EQUALS((size_t)0, s->size());
             delete s;
         }
         return true;
@@ -648,7 +651,7 @@ int main(int argc, char *argv[]) {
 
 #if PLUGINPARAMETERS_MULTITHREADED
     ADD_TEST(_Tests::testCreateConcurrentParameterSet());
-    // ADD_TEST(_Tests::testCreateManyConcurrentParameterSets());
+    ADD_TEST(_Tests::testCreateManyConcurrentParameterSets());
     ADD_TEST(_Tests::testThreadsafeSetParameterAsync());
     ADD_TEST(_Tests::testThreadsafeSetParameterRealtime());
     ADD_TEST(_Tests::testThreadsafeSetParameterBothThreadsFromAsync());
