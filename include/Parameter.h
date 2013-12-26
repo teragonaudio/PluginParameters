@@ -256,7 +256,7 @@ public:
         observers.push_back(observer);
     }
 
-    virtual ParameterObserver *getObserver(const unsigned int index) const {
+    virtual ParameterObserver *getObserver(const size_t index) const {
         return index < observers.size() ? observers.at(index) : NULL;
     }
 
