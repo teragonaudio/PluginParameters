@@ -60,7 +60,7 @@ public:
     return (log(getValue()) - logMinValue) / range;
   }
 
-#if ENABLE_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
 #if HAVE_TESTRUNNER
   friend class _Tests;
 #endif

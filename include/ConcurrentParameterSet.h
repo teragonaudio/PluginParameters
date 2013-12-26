@@ -23,10 +23,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __ThreadsafePluginParameterSet_h__
-#define __ThreadsafePluginParameterSet_h__
+#ifndef __PluginParameters_ConcurrentParameterSet_h__
+#define __PluginParameters_ConcurrentParameterSet_h__
 
-#if ENABLE_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
 #include "ParameterSet.h"
 #include "Parameter.h"
 #include "EventDispatcher.h"

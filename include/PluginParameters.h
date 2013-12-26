@@ -26,8 +26,8 @@
 #ifndef __PLUGINPARAMETERS_H__
 #define	__PLUGINPARAMETERS_H__
 
-#ifndef ENABLE_MULTITHREADED
-#define ENABLE_MULTITHREADED 0
+#ifndef PLUGINPARAMETERS_MULTITHREADED
+#define PLUGINPARAMETERS_MULTITHREADED 1
 #endif
 
 #include "BooleanParameter.h"
@@ -39,7 +39,7 @@
 #include "ParameterSet.h"
 #include "VoidParameter.h"
 
-#if ENABLE_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
 #include "EventDispatcher.h"
 #include "ConcurrentParameterSet.h"
 #endif

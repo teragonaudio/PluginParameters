@@ -26,7 +26,7 @@
 #ifndef __EVENTDISPATCHER_H__
 #define	__EVENTDISPATCHER_H__
 
-#if ENABLE_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
 #include "readerwriterqueue/readerwriterqueue.h"
 #include "tinythread/source/tinythread.h"
 #include "Event.h"
@@ -111,5 +111,5 @@ private:
 };
 } // namespace teragon
 
-#endif // ENABLE_MULTITHREADED
+#endif // PLUGINPARAMETERS_MULTITHREADED
 #endif // __EVENTDISPATCHER_H__

@@ -41,7 +41,7 @@ public:
   ParameterObserver() {}
   virtual ~ParameterObserver() {}
 
-#if ENABLE_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
   virtual bool isRealtimePriority() const = 0;
 #endif
 
@@ -135,7 +135,7 @@ public:
    */
   virtual const ParameterValue getValue() const { return value; }
 
-#if ENABLE_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
   friend class Event;
   friend class ScaledEvent;
 #if HAVE_TESTRUNNER
@@ -171,7 +171,7 @@ protected:
    */
   virtual void setScaledValue(const ParameterValue value) = 0;
 
-#if ENABLE_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
 public:
 #endif
 
@@ -259,12 +259,12 @@ public:
 protected:
   /**
    * Notify all observers that a parameter has been updated. If PluginParameters
-   * is built with ENABLE_MULTITHREADED=1, this method has no effect, since it
+   * is built with PLUGINPARAMETERS_MULTITHREADED=1, this method has no effect, since it
    * will be called synchronously, and observer updates are instead executed
    * from the EventDispatcher in that case.
    */
   virtual void notifyObservers() const {
-#if ! ENABLE_MULTITHREADED
+#if ! PLUGINPARAMETERS_MULTITHREADED
     for(ParameterObserverMap::const_iterator iterator = observers.begin(); iterator != observers.end(); ++iterator) {
       (*iterator)->onParameterUpdated(this);
     }

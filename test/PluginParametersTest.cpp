@@ -28,7 +28,7 @@
 #include "TestRunner.h"
 #include "PluginParameters.h"
 
-#if ENABLE_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
 // Simulate a realtime audio system by sleeping a bit after processing events.
 // Here we assume 11ms sleep per block, which is approximately the amount of
 // time needed to process 512 samples at 44100Hz sample rate.
@@ -127,7 +127,7 @@ static bool testSetBoolParameter() {
 
 static bool testSetBoolParameterWithListener() {
   // This test only works in the single-threaded version of PluginParameters,
-#if ! ENABLE_MULTITHREADED
+#if ! PLUGINPARAMETERS_MULTITHREADED
   BooleanParameter *p = new BooleanParameter("test");
   BooleanParameterObserver l;
   p->addObserver(&l);
@@ -235,7 +235,7 @@ static bool testSetStringParameter() {
 
 static bool testSetStringParameterWithListener() {
   // This test only works in the single-threaded version of PluginParameters,
-#if ! ENABLE_MULTITHREADED
+#if ! PLUGINPARAMETERS_MULTITHREADED
   StringParameter *p = new StringParameter("test", "whatever");
   StringParameterObserver l;
   p->addObserver(&l);
@@ -248,7 +248,7 @@ static bool testSetStringParameterWithListener() {
 
 static bool testCreateVoidParameter() {
   // This test only works in the single-threaded version of PluginParameters,
-#if ! ENABLE_MULTITHREADED
+#if ! PLUGINPARAMETERS_MULTITHREADED
   VoidParameter *p = new VoidParameter("test");
   ASSERT_EQUALS(0.0, p->getValue());
   TestCounterObserver l;
@@ -379,7 +379,7 @@ static bool testGetSafeName() {
 
 static bool testAddObserver() {
   // This test only works in the single-threaded version of PluginParameters,
-#if ! ENABLE_MULTITHREADED
+#if ! PLUGINPARAMETERS_MULTITHREADED
   BooleanParameter *p = new BooleanParameter("test");
   TestObserver t;
   p->addObserver(&t);
@@ -454,7 +454,7 @@ static bool testSetPrecision() {
   return true;
 }
 
-#if ENABLE_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
 static bool testCreateConcurrentParameterSet() {
   ConcurrentParameterSet s;
   ASSERT_INT_EQUALS(0, s.size());
@@ -621,7 +621,7 @@ int main(int argc, char* argv[]) {
   ADD_TEST(_Tests::testSetParameterUnit());
   ADD_TEST(_Tests::testSetPrecision());
 
-#if ENABLE_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
   ADD_TEST(_Tests::testCreateConcurrentParameterSet());
   // ADD_TEST(_Tests::testCreateManyConcurrentParameterSets());
   ADD_TEST(_Tests::testThreadsafeSetParameterAsync());

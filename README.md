@@ -117,7 +117,7 @@ get/set parameter values.
 The multithreaded mode must be enabled at compile-time like so:
 
 ```c++
-#define ENABLE_MULTITHREADED 1
+#define PLUGINPARAMETERS_MULTITHREADED 1
 #include "PluginParameters.h"
 ```
 
@@ -244,7 +244,7 @@ License
 
 PluginParameters is licensed under the BSD licnese. See the file `LICENSE.txt`
 provided with the source code for more details. If built with
-`ENABLE_MULTITHREADED`, then code from [TinyThread++][2] and
+`PLUGINPARAMETERS_MULTITHREADED`, then code from [TinyThread++][2] and
 [readerwriterqueue][3] is used. Please see the respective license files for
 each of these libraries, which can be found in the `include` directory.
 

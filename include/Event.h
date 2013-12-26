@@ -26,7 +26,7 @@
 #ifndef __EVENT_H__
 #define	__EVENT_H__
 
-#if ENABLE_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
 #include "Parameter.h"
 #include "StringParameter.h"
 
@@ -76,5 +76,5 @@ public:
 };
 } // namespace teragon
 
-#endif // ENABLE_MULTITHREADED
+#endif // PLUGINPARAMETERS_MULTITHREADED
 #endif // __EVENT_H__
