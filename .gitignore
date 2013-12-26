@@ -13,6 +13,8 @@ pluginparameterstest.exe
 test/out/*
 
 # Stuff from various IDE's
+.idea/*
+*.xcodeproj
 *.perspectivev3
 *.pbxuser
 *.user
@@ -37,6 +39,7 @@ cscope.out
 # CMake
 CMakeCache.txt
 CMakeFiles
+CMakeScripts
 Makefile
 Makefile.in
 *.cmake
