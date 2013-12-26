@@ -41,7 +41,7 @@
 
 #if ENABLE_MULTITHREADED
 #include "EventDispatcher.h"
-#include "ThreadsafePluginParameterSet.h"
+#include "ConcurrentParameterSet.h"
 #endif
 
 #endif

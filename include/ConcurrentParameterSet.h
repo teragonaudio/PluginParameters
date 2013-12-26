@@ -55,7 +55,7 @@ static void asyncDispatcherCallback(void *arg) {
   }
 }
 
-class ThreadsafePluginParameterSet : public ParameterSet, public EventScheduler {
+class ConcurrentParameterSet : public ParameterSet, public EventScheduler {
 public:
   /**
    * Create a new parameter set which can be used by multiple threads. This
@@ -66,7 +66,7 @@ public:
    * thread-safe code. See the top-level README for information and examples
    * regarding correct usage of this class.
    */
-  explicit ThreadsafePluginParameterSet() : ParameterSet(), EventScheduler(),
+  explicit ConcurrentParameterSet() : ParameterSet(), EventScheduler(),
     asyncDispatcher(this, false), realtimeDispatcher(this, true),
     asyncDispatcherThread(asyncDispatcherCallback, &asyncDispatcher) {
     asyncDispatcherThread.set_name("PluginParameterSetScheduler");
@@ -99,7 +99,7 @@ public:
 #endif
   }
 
-  virtual ~ThreadsafePluginParameterSet() {
+  virtual ~ConcurrentParameterSet() {
     asyncDispatcher.kill();
     asyncDispatcherThread.join();
   }

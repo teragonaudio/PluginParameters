@@ -455,16 +455,16 @@ static bool testSetPrecision() {
 }
 
 #if ENABLE_MULTITHREADED
-static bool testCreateThreadsafeParameterSet() {
-  ThreadsafePluginParameterSet s;
+static bool testCreateConcurrentParameterSet() {
+  ConcurrentParameterSet s;
   ASSERT_INT_EQUALS(0, s.size());
   return true;
 }
 
-static bool testCreateManyThreadsafeParameterSets() {
+static bool testCreateManyConcurrentParameterSets() {
   // Attempt to expose bugs caused by fast-exiting threads
   for(int i = 0; i < 100; i++) {
-    ThreadsafePluginParameterSet *s = new ThreadsafePluginParameterSet();
+    ConcurrentParameterSet *s = new ConcurrentParameterSet();
     ASSERT_INT_EQUALS(0, s->size());
     delete s;
   }
@@ -472,7 +472,7 @@ static bool testCreateManyThreadsafeParameterSets() {
 }
 
 static bool testThreadsafeSetParameterRealtime() {
-  ThreadsafePluginParameterSet s;
+  ConcurrentParameterSet s;
   Parameter *p = s.add(new BooleanParameter("test"));
   ASSERT_NOT_NULL(p);
   ASSERT_FALSE(p->getValue());
@@ -483,7 +483,7 @@ static bool testThreadsafeSetParameterRealtime() {
 }
 
 static bool testThreadsafeSetParameterAsync() {
-  ThreadsafePluginParameterSet s;
+  ConcurrentParameterSet s;
   Parameter *p = s.add(new BooleanParameter("test"));
   ASSERT_NOT_NULL(p);
   ASSERT_FALSE(p->getValue());
@@ -497,7 +497,7 @@ static bool testThreadsafeSetParameterAsync() {
 }
 
 static bool testThreadsafeSetParameterBothThreadsFromAsync() {
-  ThreadsafePluginParameterSet s;
+  ConcurrentParameterSet s;
   TestCacheValueObserver realtimeObserver(true);
   TestCacheValueObserver asyncObserver(false);
   Parameter *p = s.add(new BooleanParameter("test"));
@@ -519,7 +519,7 @@ static bool testThreadsafeSetParameterBothThreadsFromAsync() {
 }
 
 static bool testThreadsafeSetParameterBothThreadsFromRealtime() {
-  ThreadsafePluginParameterSet s;
+  ConcurrentParameterSet s;
   TestCounterObserver realtimeObserver(true);
   TestCounterObserver asyncObserver(false);
   Parameter *p = s.add(new BooleanParameter("test"));
@@ -539,7 +539,7 @@ static bool testThreadsafeSetParameterBothThreadsFromRealtime() {
 }
 
 static bool testThreadsafeSetParameterWithSender() {
-  ThreadsafePluginParameterSet s;
+  ConcurrentParameterSet s;
   TestCounterObserver realtimeObserver(true);
   TestCounterObserver asyncObserver(false);
   Parameter *p = s.add(new BooleanParameter("test"));
@@ -622,8 +622,8 @@ int main(int argc, char* argv[]) {
   ADD_TEST(_Tests::testSetPrecision());
 
 #if ENABLE_MULTITHREADED
-  ADD_TEST(_Tests::testCreateThreadsafeParameterSet());
-  // ADD_TEST(_Tests::testCreateManyThreadsafeParameterSets());
+  ADD_TEST(_Tests::testCreateConcurrentParameterSet());
+  // ADD_TEST(_Tests::testCreateManyConcurrentParameterSets());
   ADD_TEST(_Tests::testThreadsafeSetParameterAsync());
   ADD_TEST(_Tests::testThreadsafeSetParameterRealtime());
   ADD_TEST(_Tests::testThreadsafeSetParameterBothThreadsFromAsync());
