@@ -27,17 +27,9 @@
 
 // Must be included before PluginParameters.h
 #include "TestRunner.h"
+// Force non-multithreaded build
+#define PLUGINPARAMETERS_MULTITHREADED 0
 #include "PluginParameters.h"
-
-#if PLUGINPARAMETERS_MULTITHREADED
-// Simulate a realtime audio system by sleeping a bit after processing events.
-// Here we assume 11ms sleep per block, which is approximately the amount of
-// time needed to process 512 samples at 44100Hz sample rate.
-// Several blocks may be processed before async changes are received, but here
-// we only want to ensure that the event was routed from async->realtime.
-#define SLEEP_TIME_PER_BLOCK_MS 11
-#define TEST_NUM_BLOCKS_TO_PROCESS 10
-#endif
 
 namespace teragon {
 
@@ -48,10 +40,6 @@ namespace teragon {
 class TestObserver : public ParameterObserver {
 public:
     TestObserver() : ParameterObserver(), notified(false) {}
-
-    bool isRealtimePriority() const {
-        return true;
-    }
 
     void onParameterUpdated(const Parameter *parameter) {
         notified = true;
@@ -67,10 +55,6 @@ public:
 
     virtual ~TestCounterObserver() {}
 
-    bool isRealtimePriority() const {
-        return realtime;
-    }
-
     virtual void onParameterUpdated(const Parameter *parameter) {
         count++;
     }
@@ -79,27 +63,11 @@ public:
     int count;
 };
 
-class TestCacheValueObserver : public TestCounterObserver {
-public:
-    TestCacheValueObserver(bool isRealtime = true) : TestCounterObserver(isRealtime), value(0) {}
-
-    void onParameterUpdated(const Parameter *parameter) {
-        TestCounterObserver::onParameterUpdated(parameter);
-        value = parameter->getValue();
-    }
-
-    ParameterValue value;
-};
-
 class BooleanParameterObserver : public ParameterObserver {
 public:
     BooleanParameterObserver() : ParameterObserver(), value(false) {}
 
     virtual ~BooleanParameterObserver() {}
-
-    bool isRealtimePriority() const {
-        return true;
-    }
 
     void onParameterUpdated(const Parameter *parameter) {
         value = parameter->getValue() > 0.5;
@@ -113,10 +81,6 @@ public:
     StringParameterObserver() : ParameterObserver(), value("") {}
 
     virtual ~StringParameterObserver() {}
-
-    bool isRealtimePriority() const {
-        return true;
-    }
 
     void onParameterUpdated(const Parameter *parameter) {
         value = parameter->getDisplayText();
@@ -151,15 +115,12 @@ public:
     }
 
     static bool testSetBoolParameterWithListener() {
-#if !PLUGINPARAMETERS_MULTITHREADED
-        // This test only works in the single-threaded version of PluginParameters,
         BooleanParameter *p = new BooleanParameter("test");
         BooleanParameterObserver l;
         p->addObserver(&l);
         p->setValue(true);
         ASSERT(l.value);
         delete p;
-#endif
         return true;
     }
 
@@ -259,21 +220,16 @@ public:
     }
 
     static bool testSetStringParameterWithListener() {
-#if !PLUGINPARAMETERS_MULTITHREADED
-        // This test only works in the single-threaded version of PluginParameters,
         StringParameter *p = new StringParameter("test", "whatever");
         StringParameterObserver l;
         p->addObserver(&l);
         p->setValue("something");
         ASSERT_STRING("something", l.value);
         delete p;
-#endif
         return true;
     }
 
     static bool testCreateVoidParameter() {
-#if !PLUGINPARAMETERS_MULTITHREADED
-        // This test only works in the single-threaded version of PluginParameters,
         VoidParameter *p = new VoidParameter("test");
         ASSERT_EQUALS(0.0, p->getValue());
         TestCounterObserver l;
@@ -281,7 +237,6 @@ public:
         p->setValue();
         ASSERT_INT_EQUALS(1, l.count);
         delete p;
-#endif
         return true;
     }
 
@@ -403,15 +358,12 @@ public:
     }
 
     static bool testAddObserver() {
-#if !PLUGINPARAMETERS_MULTITHREADED
-        // This test only works in the single-threaded version of PluginParameters,
         BooleanParameter *p = new BooleanParameter("test");
         TestObserver t;
         p->addObserver(&t);
         p->setValue(1.0);
         ASSERT(t.notified);
         delete p;
-#endif
         return true;
     }
 
@@ -478,115 +430,6 @@ public:
         ASSERT_STRING("0.12346", p.getDisplayText());
         return true;
     }
-
-#if PLUGINPARAMETERS_MULTITHREADED
-    static bool testCreateConcurrentParameterSet() {
-        ConcurrentParameterSet s;
-        ASSERT_SIZE_EQUALS((size_t)0, s.size());
-        return true;
-    }
-
-    static bool testCreateManyConcurrentParameterSets() {
-        // Attempt to expose bugs caused by fast-exiting threads
-        printf("\nCreating sets");
-        for(int i = 0; i < 100; i++) {
-            printf(".");
-            ConcurrentParameterSet *s = new ConcurrentParameterSet();
-            ASSERT_SIZE_EQUALS((size_t)0, s->size());
-            delete s;
-        }
-        return true;
-    }
-
-    static bool testThreadsafeSetParameterRealtime() {
-        ConcurrentParameterSet s;
-        Parameter *p = s.add(new BooleanParameter("test"));
-        ASSERT_NOT_NULL(p);
-        ASSERT_FALSE(p->getValue());
-        s.set(p, true);
-        s.processRealtimeEvents();
-        ASSERT(p->getValue());
-        return true;
-    }
-
-    static bool testThreadsafeSetParameterAsync() {
-        ConcurrentParameterSet s;
-        Parameter *p = s.add(new BooleanParameter("test"));
-        ASSERT_NOT_NULL(p);
-        ASSERT_FALSE(p->getValue());
-        s.set(p, true);
-        while(!p->getValue()) {
-            s.processRealtimeEvents();
-            usleep(1000 * SLEEP_TIME_PER_BLOCK_MS);
-        }
-        ASSERT(p->getValue());
-        return true;
-    }
-
-    static bool testThreadsafeSetParameterBothThreadsFromAsync() {
-        ConcurrentParameterSet s;
-        TestCacheValueObserver realtimeObserver(true);
-        TestCacheValueObserver asyncObserver(false);
-        Parameter *p = s.add(new BooleanParameter("test"));
-        ASSERT_NOT_NULL(p);
-        p->addObserver(&realtimeObserver);
-        p->addObserver(&asyncObserver);
-        ASSERT_FALSE(p->getValue());
-        s.set(p, true);
-        for(int i = 0; i < TEST_NUM_BLOCKS_TO_PROCESS; i++) {
-            s.processRealtimeEvents();
-            usleep(1000 * SLEEP_TIME_PER_BLOCK_MS);
-        }
-        ASSERT(p->getValue());
-        ASSERT_INT_EQUALS(1, realtimeObserver.count);
-        ASSERT_INT_EQUALS(1, (int)realtimeObserver.value);
-        ASSERT_INT_EQUALS(1, asyncObserver.count);
-        ASSERT_INT_EQUALS(1, (int)asyncObserver.value);
-        return true;
-    }
-
-    static bool testThreadsafeSetParameterBothThreadsFromRealtime() {
-        ConcurrentParameterSet s;
-        TestCounterObserver realtimeObserver(true);
-        TestCounterObserver asyncObserver(false);
-        Parameter *p = s.add(new BooleanParameter("test"));
-        ASSERT_NOT_NULL(p);
-        p->addObserver(&realtimeObserver);
-        p->addObserver(&asyncObserver);
-        ASSERT_FALSE(p->getValue());
-        s.set(p, true);
-        for(int i = 0; i < TEST_NUM_BLOCKS_TO_PROCESS; i++) {
-            s.processRealtimeEvents();
-            usleep(1000 * SLEEP_TIME_PER_BLOCK_MS);
-        }
-        ASSERT(p->getValue());
-        ASSERT_INT_EQUALS(1, realtimeObserver.count);
-        ASSERT_INT_EQUALS(1, asyncObserver.count);
-        return true;
-    }
-
-    static bool testThreadsafeSetParameterWithSender() {
-        ConcurrentParameterSet s;
-        TestCounterObserver realtimeObserver(true);
-        TestCounterObserver asyncObserver(false);
-        Parameter *p = s.add(new BooleanParameter("test"));
-        ASSERT_NOT_NULL(p);
-        p->addObserver(&realtimeObserver);
-        p->addObserver(&asyncObserver);
-        ASSERT_FALSE(p->getValue());
-        s.set(p, true, &asyncObserver);
-        for(int i = 0; i < TEST_NUM_BLOCKS_TO_PROCESS; i++) {
-            s.processRealtimeEvents();
-            usleep(1000 * SLEEP_TIME_PER_BLOCK_MS);
-        }
-        ASSERT(p->getValue());
-        ASSERT_INT_EQUALS(1, realtimeObserver.count);
-        // The sender should NOT be called for its own events
-        ASSERT_INT_EQUALS(0, asyncObserver.count);
-        return true;
-    }
-
-#endif // PLUGINPARAMETERS_MULTITHREADED
 };
 
 } // namespace teragon
@@ -648,16 +491,6 @@ int main(int argc, char *argv[]) {
     ADD_TEST(_Tests::testGetDefaultValue());
     ADD_TEST(_Tests::testSetParameterUnit());
     ADD_TEST(_Tests::testSetPrecision());
-
-#if PLUGINPARAMETERS_MULTITHREADED
-    ADD_TEST(_Tests::testCreateConcurrentParameterSet());
-    ADD_TEST(_Tests::testCreateManyConcurrentParameterSets());
-    ADD_TEST(_Tests::testThreadsafeSetParameterAsync());
-    ADD_TEST(_Tests::testThreadsafeSetParameterRealtime());
-    ADD_TEST(_Tests::testThreadsafeSetParameterBothThreadsFromAsync());
-    ADD_TEST(_Tests::testThreadsafeSetParameterBothThreadsFromRealtime());
-    ADD_TEST(_Tests::testThreadsafeSetParameterWithSender());
-#endif
 
     if(gNumFailedTests > 0) {
         printf("\nFAILED %d tests\n", gNumFailedTests);
