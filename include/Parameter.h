@@ -44,7 +44,7 @@ public:
     virtual ~ParameterObserver() {}
 
 #if PLUGINPARAMETERS_MULTITHREADED
-  virtual bool isRealtimePriority() const = 0;
+    virtual bool isRealtimePriority() const = 0;
 #endif
 
     /**
