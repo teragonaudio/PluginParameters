@@ -334,7 +334,7 @@ using namespace teragon;
 
 int main(int argc, char *argv[]) {
     gNumFailedTests = 0;
-    const int numIterations = 2000;
+    const int numIterations = 100;
 
     // Run the tests several times, which increases the probability of exposing
     // race conditions or other multithreaded bugs. Note that even by doing this,
