@@ -33,11 +33,20 @@ namespace teragon {
 
 class BlobParameter : public DataParameter {
 public:
-    explicit BlobParameter(ParameterString inName, void *inData = NULL, size_t inDataSize = 0) :
+    BlobParameter(const ParameterString &inName, void *inData = NULL, size_t inDataSize = 0) :
     DataParameter(inName),
-    data(inData), dataSize(inDataSize) {}
+    data(NULL), dataSize(inDataSize) {
+        if(inData != NULL && inDataSize > 0) {
+            data = malloc(inDataSize);
+            memcpy(data, inData, inDataSize);
+        }
+    }
 
-    virtual ~BlobParameter() {}
+    virtual ~BlobParameter() {
+        if(data != NULL) {
+            free(data);
+        }
+    }
 
     virtual const ParameterString getDisplayText() const {
         return (data != NULL && dataSize > 0) ? "(Data)" : "(Null)";
