@@ -146,7 +146,7 @@ public:
      *               since presumably this object is pushing state to other
      *               observers.
      */
-    virtual void set(const int index, const ParameterValue value,
+    virtual void set(const size_t index, const ParameterValue value,
                      ParameterObserver *sender = NULL) {
         return set(parameterList.at(index), value, sender);
     }
@@ -206,7 +206,7 @@ public:
      *               since presumably this object is pushing state to other
      *               observers.
      */
-    virtual void setScaled(const int index, const ParameterValue value,
+    virtual void setScaled(const size_t index, const ParameterValue value,
                            ParameterObserver *sender = NULL) {
         return setScaled(parameterList.at(index), value, sender);
     }
