@@ -93,6 +93,7 @@ public:
         printf("\nCreating sets");
         for(int i = 0; i < 20; i++) {
             printf(".");
+            fflush(stdout);
             ConcurrentParameterSet *s = new ConcurrentParameterSet();
             ASSERT_SIZE_EQUALS((size_t)0, s->size());
             delete s;
