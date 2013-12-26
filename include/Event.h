@@ -23,10 +23,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __EVENT_H__
-#define	__EVENT_H__
+#ifndef __PluginParameters_Event_h__
+#define __PluginParameters_Event_h__
 
-#if PLUGINPARAMETERS_MULTITHREADED
 #include "Parameter.h"
 #include "StringParameter.h"
 
@@ -34,47 +33,58 @@ namespace teragon {
 
 class Event {
 public:
-  Event(Parameter* p, ParameterValue v,
-    bool realtime = false, ParameterObserver* s = NULL) :
+    Event(Parameter *p, ParameterValue v,
+          bool realtime = false, ParameterObserver *s = NULL) :
     parameter(p), value(v), isRealtime(realtime), sender(s) {}
-  virtual ~Event() {}
 
-  virtual void apply() { parameter->setValue(value); }
+    virtual ~Event() {}
 
-  Parameter* parameter;
-  const ParameterValue value;
-  bool isRealtime;
-  const ParameterObserver* sender;
+    virtual void apply() {
+        parameter->setValue(value);
+    }
+
+    Parameter *parameter;
+    const ParameterValue value;
+    bool isRealtime;
+    const ParameterObserver *sender;
 
 private:
-  // Disallow assignment operator
-  Event& operator=(const Event&) { return *this; }
+    // Disallow assignment operator
+    Event &operator = (const Event &) {
+        return *this;
+    }
 };
 
 class ScaledEvent : public Event {
 public:
-  ScaledEvent(Parameter* p, ParameterValue v,
-    bool realtime = false, ParameterObserver* s = NULL) :
-  Event(p, v, realtime, s) {}
-  virtual ~ScaledEvent() {}
+    ScaledEvent(Parameter *p, ParameterValue v,
+                bool realtime = false, ParameterObserver *s = NULL) :
+    Event(p, v, realtime, s) {}
 
-  virtual void apply() { parameter->setScaledValue(value); }
+    virtual ~ScaledEvent() {}
+
+    virtual void apply() {
+        parameter->setScaledValue(value);
+    }
 };
 
 class StringEvent : public Event {
 public:
-  StringEvent(StringParameter* p, ParameterString v,
-    bool realtime = false, ParameterObserver* s = NULL) :
-  Event(dynamic_cast<Parameter*>(p), 0, realtime, s),
+    StringEvent(StringParameter *p, ParameterString v,
+                bool realtime = false, ParameterObserver *s = NULL) :
+    Event(dynamic_cast<Parameter *>(p), 0, realtime, s),
     stringParameter(p), stringValue(v) {}
-  virtual ~StringEvent() {}
 
-  virtual void apply() { stringParameter->setValue(stringValue); }
+    virtual ~StringEvent() {}
 
-  StringParameter* stringParameter;
-  const ParameterString stringValue;
+    virtual void apply() {
+        stringParameter->setValue(stringValue);
+    }
+
+    StringParameter *stringParameter;
+    const ParameterString stringValue;
 };
+
 } // namespace teragon
 
-#endif // PLUGINPARAMETERS_MULTITHREADED
-#endif // __EVENT_H__
+#endif // __PluginParameters_Event_h__

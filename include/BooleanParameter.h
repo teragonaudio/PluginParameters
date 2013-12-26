@@ -23,24 +23,40 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __BooleanParameter_h__
-#define __BooleanParameter_h__
+#ifndef __PluginParameters_BooleanParameter_h__
+#define __PluginParameters_BooleanParameter_h__
 
 #include "Parameter.h"
 
 namespace teragon {
+
 class BooleanParameter : public Parameter {
 public:
-  explicit BooleanParameter(ParameterString inName, bool inDefaultValue = false) :
-  Parameter(inName), value(inDefaultValue) {}
-  virtual ~BooleanParameter() {}
+    explicit BooleanParameter(ParameterString inName,
+                              bool inDefaultValue = false) :
+    Parameter(inName), value(inDefaultValue) {}
 
-  virtual const ParameterString getDisplayText() const { return value ? "Enabled" : "Disabled"; }
-  virtual const ParameterValue getDisplayValue() const { return getValue(); }
-  virtual void setDisplayValue(const ParameterValue inValue) { setValue(inValue); }
+    virtual ~BooleanParameter() {}
 
-  virtual const ParameterValue getScaledValue() const { return getValue(); }
-  virtual const ParameterValue getValue() const { return value ? 1.0 : 0.0; }
+    virtual const ParameterString getDisplayText() const {
+        return value ? "Enabled" : "Disabled";
+    }
+
+    virtual const ParameterValue getDisplayValue() const {
+        return getValue();
+    }
+
+    virtual void setDisplayValue(const ParameterValue inValue) {
+        setValue(inValue);
+    }
+
+    virtual const ParameterValue getScaledValue() const {
+        return getValue();
+    }
+
+    virtual const ParameterValue getValue() const {
+        return value ? 1.0 : 0.0;
+    }
 
 #if PLUGINPARAMETERS_MULTITHREADED
 #if HAVE_TESTRUNNER
@@ -48,15 +64,20 @@ public:
 #endif
 protected:
 #endif
-  virtual void setScaledValue(const ParameterValue inValue) { setValue(inValue); }
-  virtual void setValue(const ParameterValue inValue) {
-    value = inValue > 0.5 ? true : false;
-    Parameter::setValue(inValue);
-  }
+
+    virtual void setScaledValue(const ParameterValue inValue) {
+        setValue(inValue);
+    }
+
+    virtual void setValue(const ParameterValue inValue) {
+        value = inValue > 0.5 ? true : false;
+        Parameter::setValue(inValue);
+    }
 
 private:
-  bool value;
+    bool value;
 };
-}
 
-#endif
+} // namespace teragon
+
+#endif // __PluginParameters_BooleanParameter_h__

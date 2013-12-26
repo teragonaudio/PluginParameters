@@ -23,37 +23,38 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __FloatParameter_h__
-#define __FloatParameter_h__
+#ifndef __PluginParameters_FloatParameter_h__
+#define __PluginParameters_FloatParameter_h__
 
 #include <sstream>
 #include "Parameter.h"
 
 namespace teragon {
+
 class FloatParameter : public Parameter {
 public:
-  explicit FloatParameter(ParameterString inName, ParameterValue inMinValue,
-  ParameterValue inMaxValue, ParameterValue inDefaultValue) :
-  Parameter(inName, inMinValue, inMaxValue, inDefaultValue) {
-    range = inMaxValue - inMinValue;
-  }
-
-  virtual ~FloatParameter() {}
-
-  virtual const ParameterString getDisplayText() const {
-    std::stringstream numberFormatter;
-    numberFormatter.precision(getDisplayPrecision());
-    numberFormatter << std::fixed << getValue();
-    std::string result = numberFormatter.str();
-    if(getUnit().length() > 0) {
-      result.append(" ").append(getUnit());
+    explicit FloatParameter(ParameterString inName, ParameterValue inMinValue,
+                            ParameterValue inMaxValue, ParameterValue inDefaultValue) :
+    Parameter(inName, inMinValue, inMaxValue, inDefaultValue) {
+        range = inMaxValue - inMinValue;
     }
-    return result;
-  }
 
-  virtual const ParameterValue getScaledValue() const {
-    return (getValue() - getMinValue()) / range;
-  }
+    virtual ~FloatParameter() {}
+
+    virtual const ParameterString getDisplayText() const {
+        std::stringstream numberFormatter;
+        numberFormatter.precision(getDisplayPrecision());
+        numberFormatter << std::fixed << getValue();
+        std::string result = numberFormatter.str();
+        if(getUnit().length() > 0) {
+            result.append(" ").append(getUnit());
+        }
+        return result;
+    }
+
+    virtual const ParameterValue getScaledValue() const {
+        return (getValue() - getMinValue()) / range;
+    }
 
 #if PLUGINPARAMETERS_MULTITHREADED
 #if HAVE_TESTRUNNER
@@ -61,13 +62,15 @@ public:
 #endif
 protected:
 #endif
-  virtual void setScaledValue(const ParameterValue inValue) {
-    setValue(inValue * range + getMinValue());
-  }
+
+    virtual void setScaledValue(const ParameterValue inValue) {
+        setValue(inValue * range + getMinValue());
+    }
 
 private:
-  ParameterValue range;
+    ParameterValue range;
 };
-}
 
-#endif
+} // namespace teragon
+
+#endif // __PluginParameters_FloatParameter_h__

@@ -23,8 +23,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __PLUGINPARAMETERS_H__
-#define	__PLUGINPARAMETERS_H__
+#ifndef __PluginParameters_PluginParameters_h__
+#define __PluginParameters_PluginParameters_h__
 
 #ifndef PLUGINPARAMETERS_MULTITHREADED
 #define PLUGINPARAMETERS_MULTITHREADED 1
@@ -44,4 +44,4 @@
 #include "ConcurrentParameterSet.h"
 #endif
 
-#endif
+#endif // __PluginParameters_PluginParameters_h__

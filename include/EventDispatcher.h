@@ -23,93 +23,115 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __EVENTDISPATCHER_H__
-#define	__EVENTDISPATCHER_H__
+
+#ifndef __PluginParameters_EventDispatcher_h__
+#define __PluginParameters_EventDispatcher_h__
 
 #if PLUGINPARAMETERS_MULTITHREADED
 #include "readerwriterqueue/readerwriterqueue.h"
 #include "tinythread/source/tinythread.h"
+#endif
+
 #include "Event.h"
 #include "Parameter.h"
 
 namespace teragon {
 
+#if PLUGINPARAMETERS_MULTITHREADED
 typedef tthread::thread EventDispatcherThread;
 typedef tthread::lock_guard<tthread::mutex> EventDispatcherLockGuard;
 typedef tthread::mutex EventDispatcherMutex;
 typedef tthread::condition_variable EventDispatcherConditionVariable;
+#endif
 
 class EventScheduler {
 public:
-  EventScheduler() {}
-  virtual ~EventScheduler() {}
+    EventScheduler() {}
+    virtual ~EventScheduler() {}
 
-  virtual void scheduleEvent(Event* event) = 0;
+    virtual void scheduleEvent(Event *event) = 0;
 };
 
 class EventDispatcher {
+#if PLUGINPARAMETERS_MULTITHREADED
 public:
-  EventDispatcher(EventScheduler* s, bool realtime) :
+    EventDispatcher(EventScheduler *s, bool realtime) :
     eventQueue(), scheduler(s), isRealtime(realtime), killed(false) {}
-  virtual ~EventDispatcher() {}
 
-  void add(Event* event) { eventQueue.enqueue(event); }
+    virtual ~EventDispatcher() {}
 
-  void process() {
-    Event* event = NULL;
-    while(eventQueue.try_dequeue(event)) {
-      if(event != NULL) {
-        // Only execute parameter changes on the realtime thread
-        if(isRealtime) {
-          event->apply();
-        }
-
-        // Notify all observers of the same type
-        for(size_t i = 0; i < event->parameter->getNumObservers(); ++i) {
-          ParameterObserver* observer = event->parameter->getObserver(i);
-          if(observer != NULL &&
-             observer->isRealtimePriority() == isRealtime &&
-             observer != event->sender) {
-            observer->onParameterUpdated(event->parameter);
-          }
-        }
-
-        if(isRealtime) {
-          // Re-dispatch the event to the async thread
-          event->isRealtime = false;
-          scheduler->scheduleEvent(event);
-        }
-        else {
-          // If this is the async thread, then all observers know about the
-          // parameter change and this event can be deleted.
-          delete event;
-        }
-      }
-      event = NULL;
+    void add(Event *event) {
+        eventQueue.enqueue(event);
     }
-  }
 
-  bool isKilled() const { return killed; }
-  void kill() {
-    EventDispatcherLockGuard guard(mutex);
-    killed = true;
-    notify();
-  }
+    void process() {
+        Event *event = NULL;
+        while(eventQueue.try_dequeue(event)) {
+            if(event != NULL) {
+                // Only execute parameter changes on the realtime thread
+                if(isRealtime) {
+                    event->apply();
+                }
 
-  void notify() { waitLock.notify_all(); }
-  void wait() { waitLock.wait(mutex); }
-  EventDispatcherMutex& getMutex() { return mutex; }
+                // Notify all observers of the same type
+                for(size_t i = 0; i < event->parameter->getNumObservers(); ++i) {
+                    ParameterObserver *observer = event->parameter->getObserver(i);
+                    if(observer != NULL &&
+                        observer->isRealtimePriority() == isRealtime &&
+                        observer != event->sender) {
+                        observer->onParameterUpdated(event->parameter);
+                    }
+                }
+
+                if(isRealtime) {
+                    // Re-dispatch the event to the async thread
+                    event->isRealtime = false;
+                    scheduler->scheduleEvent(event);
+                }
+                else {
+                    // If this is the async thread, then all observers know about the
+                    // parameter change and this event can be deleted.
+                    delete event;
+                }
+            }
+            event = NULL;
+        }
+    }
+
+    bool isKilled() const {
+        return killed;
+    }
+
+    void kill() {
+        EventDispatcherLockGuard guard(mutex);
+        killed = true;
+        notify();
+    }
+
+    void notify() {
+        waitLock.notify_all();
+    }
+
+    void wait() {
+        waitLock.wait(mutex);
+    }
+
+    EventDispatcherMutex &getMutex() {
+        return mutex;
+    }
 
 private:
-  tthread::condition_variable waitLock;
-  EventDispatcherMutex mutex;
-  moodycamel::ReaderWriterQueue<Event*> eventQueue;
+    tthread::condition_variable waitLock;
+    EventDispatcherMutex mutex;
+    moodycamel::ReaderWriterQueue<Event *> eventQueue;
 
-  EventScheduler* scheduler;
-  const bool isRealtime;
-  volatile bool killed;
-};
-} // namespace teragon
+    EventScheduler *scheduler;
+    const bool isRealtime;
+    volatile bool killed;
 
 #endif // PLUGINPARAMETERS_MULTITHREADED
-#endif // __EVENTDISPATCHER_H__
+};
+
+} // namespace teragon
+
+#endif // __PluginParameters_EventDispatcher_h__

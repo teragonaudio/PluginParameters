@@ -23,8 +23,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __PluginParameterSet_h__
-#define __PluginParameterSet_h__
+#ifndef __PluginParameters_PluginParameterSet_h__
+#define __PluginParameters_PluginParameterSet_h__
 
 #include <map>
 #include <vector>
@@ -34,89 +34,101 @@ namespace teragon {
 
 class ParameterSet {
 public:
-  explicit ParameterSet() {}
+    explicit ParameterSet() {}
 
-  virtual ~ParameterSet() {
-    // Delete all parameters added to the set
-    for(size_t i = 0; i < size(); i++) {
-      delete parameterList.at(i);
+    virtual ~ParameterSet() {
+        // Delete all parameters added to the set
+        for(size_t i = 0; i < size(); i++) {
+            delete parameterList.at(i);
+        }
     }
-  }
 
-  /**
-   * Add a parameter to the set. Note that this class does *not* free the
-   * parameter's memory upon destruction, if this is important to you then
-   * you must call the clear() method yourself before destroying this set
-   * instance.
-   *
-   * @param parameter Pointer to parameter instance
-   * @return parameter which was added if successful, NULL otherwise. Note that
-   *         adding a parameter to a set twice is considered failing behavior.
-   */
-  virtual Parameter * add(Parameter * parameter) {
-    if(parameter == NULL || get(parameter->getName()) != NULL) {
-      return NULL;
+    /**
+     * Add a parameter to the set. Note that this class does *not* free the
+     * parameter's memory upon destruction, if this is important to you then
+     * you must call the clear() method yourself before destroying this set
+     * instance.
+     *
+     * @param parameter Pointer to parameter instance
+     * @return parameter which was added if successful, NULL otherwise. Note that
+     *         adding a parameter to a set twice is considered failing behavior.
+     */
+    virtual Parameter *add(Parameter *parameter) {
+        if(parameter == NULL || get(parameter->getName()) != NULL) {
+            return NULL;
+        }
+        parameterMap.insert(std::make_pair(parameter->getSafeName(), parameter));
+        parameterList.push_back(parameter);
+        return parameter;
     }
-    parameterMap.insert(std::make_pair(parameter->getSafeName(), parameter));
-    parameterList.push_back(parameter);
-    return parameter;
-  }
 
-  /**
-   * @return Number of parameters in the set
-   */
-  virtual const size_t size() const { return parameterList.size(); }
-
-
-  virtual void clear() {
-    for(ParameterList::iterator iterator = parameterList.begin(); iterator != parameterList.end(); ++iterator) {
-      delete *iterator;
+    /**
+     * @return Number of parameters in the set
+     */
+    virtual const size_t size() const {
+        return parameterList.size();
     }
-    parameterList.clear();
-    parameterMap.clear();
-  }
 
-  /**
-   * Lookup a parameter by index, for example: parameterSet[2]
-   *
-   * @param i Parameter index, must be less than the set's size or undefined
-   *          behavior will occur
-   * @return Reference to parameter
-   */
-  virtual Parameter * operator[](const int i) const { return get(i); }
-  /**
-   * Lookup a parameter by index
-   *
-   * @param i Parameter index, must be less than the set's size or undefined
-   *          behavior will occur
-   * @return Reference to parameter
-   */
-  virtual Parameter * get(const int index) const { return parameterList.at(index); }
-  /**
-   * Lookup a parameter by name, for example: parameterSet["foo"]
-   *
-   * @param name The parameter's name
-   * @return Reference to parameter, or NULL if not found
-   */
-  virtual Parameter * operator[](const ParameterString& name) const { return get(name); }
-  /**
-   * Lookup a parameter by name
-   *
-   * @param name The parameter's name
-   * @return Reference to parameter, or NULL if not found
-   */
-  virtual Parameter * get(const ParameterString& name) const {
-    ParameterMap::const_iterator iterator = parameterMap.find(Parameter::makeSafeName(name));
-    return (iterator != parameterMap.end()) ? iterator->second : NULL;
-  }
+
+    virtual void clear() {
+        for(ParameterList::iterator iterator = parameterList.begin(); iterator != parameterList.end(); ++iterator) {
+            delete *iterator;
+        }
+        parameterList.clear();
+        parameterMap.clear();
+    }
+
+    /**
+     * Lookup a parameter by index, for example: parameterSet[2]
+     *
+     * @param i Parameter index, must be less than the set's size or undefined
+     *          behavior will occur
+     * @return Reference to parameter
+     */
+    virtual Parameter *operator [](const int i) const {
+        return get(i);
+    }
+
+    /**
+     * Lookup a parameter by index
+     *
+     * @param i Parameter index, must be less than the set's size or undefined
+     *          behavior will occur
+     * @return Reference to parameter
+     */
+    virtual Parameter *get(const int index) const {
+        return parameterList.at(index);
+    }
+
+    /**
+     * Lookup a parameter by name, for example: parameterSet["foo"]
+     *
+     * @param name The parameter's name
+     * @return Reference to parameter, or NULL if not found
+     */
+    virtual Parameter *operator [](const ParameterString &name) const {
+        return get(name);
+    }
+
+    /**
+     * Lookup a parameter by name
+     *
+     * @param name The parameter's name
+     * @return Reference to parameter, or NULL if not found
+     */
+    virtual Parameter *get(const ParameterString &name) const {
+        ParameterMap::const_iterator iterator = parameterMap.find(Parameter::makeSafeName(name));
+        return (iterator != parameterMap.end()) ? iterator->second : NULL;
+    }
 
 protected:
-  typedef std::map<ParameterString, Parameter *> ParameterMap;
-  typedef std::vector<Parameter *> ParameterList;
+    typedef std::map<ParameterString, Parameter *> ParameterMap;
+    typedef std::vector<Parameter *> ParameterList;
 
-  ParameterMap parameterMap;
-  ParameterList parameterList;
+    ParameterMap parameterMap;
+    ParameterList parameterList;
 };
-}
 
-#endif
+} // namespace teragon
+
+#endif // __PluginParameters_PluginParameterSet_h__

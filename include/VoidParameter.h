@@ -23,10 +23,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __VOIDPARAMETER_H_
-#define __VOIDPARAMETER_H_
+#ifndef __PluginParameters_VoidParameter_h__
+#define __PluginParameters_VoidParameter_h__
 
 namespace teragon {
+
 /**
  * Parameter which does not hold a real value. This parameter's value is
  * always 0, regardless of whether setValue() is called.
@@ -34,15 +35,29 @@ namespace teragon {
  */
 class VoidParameter : public Parameter {
 public:
-  explicit VoidParameter(ParameterString inName) : Parameter(inName) {}
-  virtual ~VoidParameter() {}
+    explicit VoidParameter(ParameterString inName) : Parameter(inName) {}
 
-  virtual const ParameterString getDisplayText() const { return "Triggered"; }
-  virtual const ParameterValue getDisplayValue() const { return getValue(); }
-  virtual void setDisplayValue(const ParameterValue inValue) { setValue(inValue); }
+    virtual ~VoidParameter() {}
 
-  virtual const ParameterValue getScaledValue() const { return getValue(); }
-  virtual const ParameterValue getValue() const { return 0.0; }
+    virtual const ParameterString getDisplayText() const {
+        return "Triggered";
+    }
+
+    virtual const ParameterValue getDisplayValue() const {
+        return getValue();
+    }
+
+    virtual void setDisplayValue(const ParameterValue inValue) {
+        setValue(inValue);
+    }
+
+    virtual const ParameterValue getScaledValue() const {
+        return getValue();
+    }
+
+    virtual const ParameterValue getValue() const {
+        return 0.0;
+    }
 
 #if PLUGINPARAMETERS_MULTITHREADED
 #if HAVE_TESTRUNNER
@@ -50,11 +65,16 @@ public:
 #endif
 protected:
 #endif
-  virtual void setScaledValue(const ParameterValue inValue) { setValue(inValue); }
-  virtual void setValue(const ParameterValue = 0.0) {
-    notifyObservers();
-  }
-};
-}
-#endif
 
+    virtual void setScaledValue(const ParameterValue inValue) {
+        setValue(inValue);
+    }
+
+    virtual void setValue(const ParameterValue = 0.0) {
+        notifyObservers();
+    }
+};
+
+} // namespace teragon
+
+#endif // __PluginParameters_VoidParameter_h__

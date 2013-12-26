@@ -23,42 +23,67 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __StringParameter_h__
-#define __StringParameter_h__
+#ifndef __PluginParameters_StringParameter_h__
+#define __PluginParameters_StringParameter_h__
 
 #include "Parameter.h"
 
 namespace teragon {
+
 class StringParameter : public Parameter {
 public:
-  explicit StringParameter(ParameterString inName, ParameterString inDefaultValue = "") :
-  Parameter(inName), value(inDefaultValue) {}
-  virtual ~StringParameter() {}
+    explicit StringParameter(ParameterString inName, ParameterString inDefaultValue = "") :
+    Parameter(inName), value(inDefaultValue) {}
 
-  virtual const ParameterString getDisplayText() const { return value; }
-  virtual const ParameterValue getDisplayValue() const { return getValue(); }
-  virtual void setDisplayValue(const ParameterValue inValue) { setValue(inValue); }
+    virtual ~StringParameter() {}
 
-  virtual const ParameterValue getScaledValue() const { return getValue(); }
-  virtual const ParameterValue getValue() const { return 0.0; }
+    virtual const ParameterString getDisplayText() const {
+        return value;
+    }
+
+    virtual const ParameterValue getDisplayValue() const {
+        return getValue();
+    }
+
+    virtual void setDisplayValue(const ParameterValue inValue) {
+        setValue(inValue);
+    }
+
+    virtual const ParameterValue getScaledValue() const {
+        return getValue();
+    }
+
+    virtual const ParameterValue getValue() const {
+        return 0.0;
+    }
 
 #if PLUGINPARAMETERS_MULTITHREADED
-  friend class StringEvent;
+    friend class StringEvent;
+
 #if HAVE_TESTRUNNER
-  friend class _Tests;
+    friend class _Tests;
+
 #endif
 protected:
 #endif
-  virtual void setScaledValue(const ParameterValue inValue) { setValue(inValue); }
-  virtual void setValue(const ParameterValue inValue) { Parameter::setValue(inValue); }
-  virtual void setValue(const ParameterString inValue) {
-    value = inValue;
-    notifyObservers();
-  }
+
+    virtual void setScaledValue(const ParameterValue inValue) {
+        setValue(inValue);
+    }
+
+    virtual void setValue(const ParameterValue inValue) {
+        Parameter::setValue(inValue);
+    }
+
+    virtual void setValue(const ParameterString inValue) {
+        value = inValue;
+        notifyObservers();
+    }
 
 private:
-  ParameterString value;
+    ParameterString value;
 };
-}
 
-#endif
+} // namespace teragon
+
+#endif // __PluginParameters_StringParameter_h__
