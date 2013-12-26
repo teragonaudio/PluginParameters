@@ -27,7 +27,7 @@
 
 // Must be included before PluginParameters.h
 #include "TestRunner.h"
-// Force non-multithreaded build
+// Disable multi-threaded build to directly test parameter functionality
 #define PLUGINPARAMETERS_MULTITHREADED 0
 #include "PluginParameters.h"
 
@@ -273,7 +273,7 @@ public:
     }
 
     static bool testCreateParameterWithBadName() {
-        // NOTE: This test will succeed, I'd rather not throw from the ctor!
+        // NOTE: This test will succeed, I'd rather not throw from the constructor!
         // So use your head and don't make any weird parameter names. Just know
         // that the library isn't going to protect you from yourself. :)
         BooleanParameter p("");
