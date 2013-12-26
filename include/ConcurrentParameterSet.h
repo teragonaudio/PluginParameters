@@ -93,13 +93,16 @@ public:
     }
 
     /**
-     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
-     * must be used rather than Parameter::set(). The actual operation will
-     * be redispatched to the main thread and executed there, and any async
-     * observers will be notified afterwards. This means that there can be some
-     * small delay before other async observers receive their notifications.
+     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set,
+     * then this method must be used rather than Parameter::set(). The actual
+     * operation will be dispatched to the main thread and executed there, and
+     * any asynchronous observers will be notified afterwards. This means that
+     * there can a some small delay before other asynchronous observers receive
+     * their notifications. Realtime observers, however, will be notified during
+     * the next call to processRealtimeEvents().
      *
-     * @param name Parameter name
+     * @param name Parameter name. No error checking is done here, you must ensure
+     *             that the name is valid. Otherwise, this call will fail silently.
      * @param value New value
      * @param sender Sending object (can be NULL). If non-NULL, then this object
      *               will *not* receive notifications on the observer callback,
@@ -115,13 +118,16 @@ public:
     }
 
     /**
-     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
-     * must be used rather than Parameter::set(). The actual operation will
-     * be redispatched to the main thread and executed there, and any async
-     * observers will be notified afterwards. This means that there can be some
-     * small delay before other async observers receive their notifications.
+     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set,
+     * then this method must be used rather than Parameter::set(). The actual
+     * operation will be dispatched to the main thread and executed there, and
+     * any asynchronous observers will be notified afterwards. This means that
+     * there can a some small delay before other asynchronous observers receive
+     * their notifications. Realtime observers, however, will be notified during
+     * the next call to processRealtimeEvents().
      *
-     * @param index Parameter index
+     * @param index Parameter index. No error checking is done here, you must
+     *              ensure that the index is valid.
      * @param value New value
      * @param sender Sending object (can be NULL). If non-NULL, then this object
      *               will *not* receive notifications on the observer callback,
@@ -134,11 +140,13 @@ public:
     }
 
     /**
-     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
-     * must be used rather than Parameter::set(). The actual operation will
-     * be redispatched to the main thread and executed there, and any async
-     * observers will be notified afterwards. This means that there can be some
-     * small delay before other async observers receive their notifications.
+     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set,
+     * then this method must be used rather than Parameter::set(). The actual
+     * operation will be dispatched to the main thread and executed there, and
+     * any asynchronous observers will be notified afterwards. This means that
+     * there can a some small delay before other asynchronous observers receive
+     * their notifications. Realtime observers, however, will be notified during
+     * the next call to processRealtimeEvents().
      *
      * @param parameter Parameter
      * @param value New value
@@ -153,13 +161,16 @@ public:
     }
 
     /**
-     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
-     * must be used rather than Parameter::set(). The actual operation will
-     * be redispatched to the main thread and executed there, and any async
-     * observers will be notified afterwards. This means that there can be some
-     * small delay before other async observers receive their notifications.
+     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set,
+     * then this method must be used rather than Parameter::set(). The actual
+     * operation will be dispatched to the main thread and executed there, and
+     * any asynchronous observers will be notified afterwards. This means that
+     * there can a some small delay before other asynchronous observers receive
+     * their notifications. Realtime observers, however, will be notified during
+     * the next call to processRealtimeEvents().
      *
-     * @param name Parameter name
+     * @param name Parameter name. No error checking is done here, you must ensure
+     *             that the name is valid. Otherwise, this call will fail silently.
      * @param value New value
      * @param sender Sending object (can be NULL). If non-NULL, then this object
      *               will *not* receive notifications on the observer callback,
@@ -175,13 +186,16 @@ public:
     }
 
     /**
-     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
-     * must be used rather than Parameter::set(). The actual operation will
-     * be redispatched to the main thread and executed there, and any async
-     * observers will be notified afterwards. This means that there can be some
-     * small delay before other async observers receive their notifications.
+     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set,
+     * then this method must be used rather than Parameter::set(). The actual
+     * operation will be dispatched to the main thread and executed there, and
+     * any asynchronous observers will be notified afterwards. This means that
+     * there can a some small delay before other asynchronous observers receive
+     * their notifications. Realtime observers, however, will be notified during
+     * the next call to processRealtimeEvents().
      *
-     * @param index Parameter index
+     * @param index Parameter index. No error checking is done here, you must
+     *              ensure that the index is valid.
      * @param value New value
      * @param sender Sending object (can be NULL). If non-NULL, then this object
      *               will *not* receive notifications on the observer callback,
@@ -194,11 +208,13 @@ public:
     }
 
     /**
-     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
-     * must be used rather than Parameter::set(). The actual operation will
-     * be redispatched to the main thread and executed there, and any async
-     * observers will be notified afterwards. This means that there can be some
-     * small delay before other async observers receive their notifications.
+     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set,
+     * then this method must be used rather than Parameter::set(). The actual
+     * operation will be dispatched to the main thread and executed there, and
+     * any asynchronous observers will be notified afterwards. This means that
+     * there can a some small delay before other asynchronous observers receive
+     * their notifications. Realtime observers, however, will be notified during
+     * the next call to processRealtimeEvents().
      *
      * @param parameter Parameter
      * @param value New value
@@ -213,14 +229,18 @@ public:
     }
 
     /**
-     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
-     * must be used rather than Parameter::set(). The actual operation will
-     * be redispatched to the main thread and executed there, and any async
-     * observers will be notified afterwards. This means that there can be some
-     * small delay before other async observers receive their notifications.
+     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set,
+     * then this method must be used rather than Parameter::set(). The actual
+     * operation will be dispatched to the main thread and executed there, and
+     * any asynchronous observers will be notified afterwards. This means that
+     * there can a some small delay before other asynchronous observers receive
+     * their notifications. Realtime observers, however, will be notified during
+     * the next call to processRealtimeEvents().
      *
-     * @param name Parameter name
-     * @param value New string value
+     * @param name Parameter name. No error checking is done here, you must ensure
+     *             that the name is valid. Otherwise, this call will fail silently.
+     * @param value New data value
+     * @param dataSize Data size, in bytes
      * @param sender Sending object (can be NULL). If non-NULL, then this object
      *               will *not* receive notifications on the observer callback,
      *               since presumably this object is pushing state to other
@@ -235,14 +255,18 @@ public:
     }
 
     /**
-     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
-     * must be used rather than Parameter::set(). The actual operation will
-     * be redispatched to the main thread and executed there, and any async
-     * observers will be notified afterwards. This means that there can be some
-     * small delay before other async observers receive their notifications.
+     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set,
+     * then this method must be used rather than Parameter::set(). The actual
+     * operation will be dispatched to the main thread and executed there, and
+     * any asynchronous observers will be notified afterwards. This means that
+     * there can a some small delay before other asynchronous observers receive
+     * their notifications. Realtime observers, however, will be notified during
+     * the next call to processRealtimeEvents().
      *
-     * @param index Parameter index
-     * @param value New string value
+     * @param index Parameter index. No error checking is done here, you must
+     *              ensure that the index is valid.
+     * @param value New data value
+     * @param dataSize Data size, in bytes
      * @param sender Sending object (can be NULL). If non-NULL, then this object
      *               will *not* receive notifications on the observer callback,
      *               since presumably this object is pushing state to other
@@ -254,11 +278,13 @@ public:
     }
 
     /**
-     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
-     * must be used rather than Parameter::set(). The actual operation will
-     * be redispatched to the main thread and executed there, and any async
-     * observers will be notified afterwards. This means that there can be some
-     * small delay before other async observers receive their notifications.
+     * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set,
+     * then this method must be used rather than Parameter::set(). The actual
+     * operation will be dispatched to the main thread and executed there, and
+     * any asynchronous observers will be notified afterwards. This means that
+     * there can a some small delay before other asynchronous observers receive
+     * their notifications. Realtime observers, however, will be notified during
+     * the next call to processRealtimeEvents().
      *
      * @param parameter Parameter
      * @param value New data value
