@@ -148,9 +148,6 @@ public:
 #if PLUGINPARAMETERS_MULTITHREADED
   friend class Event;
   friend class ScaledEvent;
-#if HAVE_TESTRUNNER
-  friend class _Tests;
-#endif
 
   // The multithreaded version shouldn't allow parameters to have their value
   // be directly set in this manner. Instead, all parameter setting must be

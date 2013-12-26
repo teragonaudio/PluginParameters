@@ -25,11 +25,11 @@
 
 #include <stdio.h>
 
-// Must be included before PluginParameters.h
-#include "TestRunner.h"
-// Force multithreaded build
+// Force multi-threaded build
 #define PLUGINPARAMETERS_MULTITHREADED 1
+#define SLEEP_AFTER_CREATION_MS 100
 #include "PluginParameters.h"
+#include "TestRunner.h"
 
 // Simulate a realtime audio system by sleeping a bit after processing events.
 // Here we assume 11ms sleep per block, which is approximately the amount of

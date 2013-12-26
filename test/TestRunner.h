@@ -29,9 +29,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Will give us access to some otherwise private members by abusing C++ friends
-#define HAVE_TESTRUNNER 1
-
 // From http://stackoverflow.com/a/240370/14302
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)

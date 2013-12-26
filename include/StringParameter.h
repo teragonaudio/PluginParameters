@@ -51,11 +51,6 @@ public:
 
 #if PLUGINPARAMETERS_MULTITHREADED
     friend class StringEvent;
-
-#if HAVE_TESTRUNNER
-    friend class _Tests;
-
-#endif
 protected:
 #endif
 

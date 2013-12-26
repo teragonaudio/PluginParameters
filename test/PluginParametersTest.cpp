@@ -25,11 +25,10 @@
 
 #include <stdio.h>
 
-// Must be included before PluginParameters.h
-#include "TestRunner.h"
 // Disable multi-threaded build to directly test parameter functionality
 #define PLUGINPARAMETERS_MULTITHREADED 0
 #include "PluginParameters.h"
+#include "TestRunner.h"
 
 namespace teragon {
 

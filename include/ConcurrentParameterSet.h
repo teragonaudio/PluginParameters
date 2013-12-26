@@ -30,17 +30,13 @@
 #include "Parameter.h"
 #include "EventDispatcher.h"
 
-#if HAVE_TESTRUNNER
-#define SLEEP_AFTER_CREATION_MS 100
-#endif
-
 #ifndef SLEEP_AFTER_CREATION_MS
 #define SLEEP_AFTER_CREATION_MS 0
 #endif
 
 namespace teragon {
 
-#if 1//PLUGINPARAMETERS_MULTITHREADED
+#if PLUGINPARAMETERS_MULTITHREADED
 static void asyncDispatcherCallback(void *arg) {
     EventDispatcher *dispatcher = reinterpret_cast<EventDispatcher *>(arg);
     EventDispatcherLockGuard guard(dispatcher->getMutex());

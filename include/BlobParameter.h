@@ -26,6 +26,7 @@
 #ifndef __PluginParameters_BlobParameter_h__
 #define __PluginParameters_BlobParameter_h__
 
+#include <stdlib.h>
 #include "Parameter.h"
 
 namespace teragon {
