@@ -146,16 +146,16 @@ public:
     }
 
 #if PLUGINPARAMETERS_MULTITHREADED
-  friend class Event;
-  friend class ScaledEvent;
+    friend class Event;
+    friend class ScaledEvent;
 
-  // The multithreaded version shouldn't allow parameters to have their value
-  // be directly set in this manner. Instead, all parameter setting must be
-  // done by the owning parameter set, as it can dispatch the operation on
-  // the correct thread. Allowing this function to remain public might tempt
-  // misuse when caching parameters to directly get/set their value, as this
-  // would not notify all observers on both threads (not to mention other
-  // potential concurrency problems).
+    // The multi-threaded version shouldn't allow parameters to have their value
+    // be directly set in this manner. Instead, all parameter setting must be
+    // done by the owning parameter set, as it can dispatch the operation on
+    // the correct thread. Allowing this function to remain public might tempt
+    // misuse when caching parameters to directly get/set their value, as this
+    // would not notify all observers on both threads (not to mention other
+    // potential concurrency problems).
 protected:
 #endif
 
