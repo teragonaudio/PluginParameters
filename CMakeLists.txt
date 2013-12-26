@@ -19,8 +19,9 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
   set(CMAKE_CXX_FLAGS "-arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -stdlib=libc++ -std=c++11 -Wmissing-field-initializers -Wall -Wmissing-prototypes -Wreturn-type -Wunused-variable -pedantic -Wshadow -Wsign-compare -Wnewline-eof -Wshorten-64-to-32 -fasm-blocks -mmacosx-version-min=10.7")
   set(CMAKE_EXE_LINKER_FLAGS "-arch i386 -framework Carbon -framework CoreFoundation")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-	# /EHsc is needed
+  add_definitions(/DWIN32=1)
   set(CMAKE_C_FLAGS "")
+  # /EHsc is needed
   set(CMAKE_CXX_FLAGS "/EHsc")
 endif()
 
