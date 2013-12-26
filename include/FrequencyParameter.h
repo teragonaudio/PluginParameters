@@ -28,14 +28,14 @@
 
 #include <sstream>
 #include <math.h>
-#include "PluginParameter.h"
+#include "Parameter.h"
 
 namespace teragon {
-class FrequencyParameter : public PluginParameter {
+class FrequencyParameter : public Parameter {
 public:
   explicit FrequencyParameter(ParameterString inName, ParameterValue inMinValue,
   ParameterValue inMaxValue, ParameterValue inDefaultValue) :
-  PluginParameter(inName, inMinValue, inMaxValue, inDefaultValue) {
+  Parameter(inName, inMinValue, inMaxValue, inDefaultValue) {
     logMinValue = log(inMinValue);
     range = log(inMaxValue) - log(inMinValue);
   }

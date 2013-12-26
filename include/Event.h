@@ -27,21 +27,21 @@
 #define	__EVENT_H__
 
 #if ENABLE_MULTITHREADED
-#include "PluginParameter.h"
+#include "Parameter.h"
 #include "StringParameter.h"
 
 namespace teragon {
 
 class Event {
 public:
-  Event(PluginParameter* p, ParameterValue v,
+  Event(Parameter* p, ParameterValue v,
     bool realtime = false, ParameterObserver* s = NULL) :
     parameter(p), value(v), isRealtime(realtime), sender(s) {}
   virtual ~Event() {}
 
   virtual void apply() { parameter->setValue(value); }
 
-  PluginParameter* parameter;
+  Parameter* parameter;
   const ParameterValue value;
   bool isRealtime;
   const ParameterObserver* sender;
@@ -53,7 +53,7 @@ private:
 
 class ScaledEvent : public Event {
 public:
-  ScaledEvent(PluginParameter* p, ParameterValue v,
+  ScaledEvent(Parameter* p, ParameterValue v,
     bool realtime = false, ParameterObserver* s = NULL) :
   Event(p, v, realtime, s) {}
   virtual ~ScaledEvent() {}
@@ -65,7 +65,7 @@ class StringEvent : public Event {
 public:
   StringEvent(StringParameter* p, ParameterString v,
     bool realtime = false, ParameterObserver* s = NULL) :
-  Event(dynamic_cast<PluginParameter*>(p), 0, realtime, s),
+  Event(dynamic_cast<Parameter*>(p), 0, realtime, s),
     stringParameter(p), stringValue(v) {}
   virtual ~StringEvent() {}
 

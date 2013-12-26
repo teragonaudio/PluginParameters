@@ -27,14 +27,14 @@
 #define __FloatParameter_h__
 
 #include <sstream>
-#include "PluginParameter.h"
+#include "Parameter.h"
 
 namespace teragon {
-class FloatParameter : public PluginParameter {
+class FloatParameter : public Parameter {
 public:
   explicit FloatParameter(ParameterString inName, ParameterValue inMinValue,
   ParameterValue inMaxValue, ParameterValue inDefaultValue) :
-  PluginParameter(inName, inMinValue, inMaxValue, inDefaultValue) {
+  Parameter(inName, inMinValue, inMaxValue, inDefaultValue) {
     range = inMaxValue - inMinValue;
   }
 

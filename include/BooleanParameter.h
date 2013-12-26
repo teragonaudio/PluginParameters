@@ -26,13 +26,13 @@
 #ifndef __BooleanParameter_h__
 #define __BooleanParameter_h__
 
-#include "PluginParameter.h"
+#include "Parameter.h"
 
 namespace teragon {
-class BooleanParameter : public PluginParameter {
+class BooleanParameter : public Parameter {
 public:
   explicit BooleanParameter(ParameterString inName, bool inDefaultValue = false) :
-  PluginParameter(inName), value(inDefaultValue) {}
+  Parameter(inName), value(inDefaultValue) {}
   virtual ~BooleanParameter() {}
 
   virtual const ParameterString getDisplayText() const { return value ? "Enabled" : "Disabled"; }
@@ -51,7 +51,7 @@ protected:
   virtual void setScaledValue(const ParameterValue inValue) { setValue(inValue); }
   virtual void setValue(const ParameterValue inValue) {
     value = inValue > 0.5 ? true : false;
-    PluginParameter::setValue(inValue);
+    Parameter::setValue(inValue);
   }
 
 private:

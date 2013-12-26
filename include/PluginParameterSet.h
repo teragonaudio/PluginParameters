@@ -28,7 +28,7 @@
 
 #include <map>
 #include <vector>
-#include "PluginParameter.h"
+#include "Parameter.h"
 
 namespace teragon {
 
@@ -53,7 +53,7 @@ public:
    * @return parameter which was added if successful, NULL otherwise. Note that
    *         adding a parameter to a set twice is considered failing behavior.
    */
-  virtual PluginParameter* add(PluginParameter* parameter) {
+  virtual Parameter * add(Parameter * parameter) {
     if(parameter == NULL || get(parameter->getName()) != NULL) {
       return NULL;
     }
@@ -83,7 +83,7 @@ public:
    *          behavior will occur
    * @return Reference to parameter
    */
-  virtual PluginParameter* operator[](const int i) const { return get(i); }
+  virtual Parameter * operator[](const int i) const { return get(i); }
   /**
    * Lookup a parameter by index
    *
@@ -91,28 +91,28 @@ public:
    *          behavior will occur
    * @return Reference to parameter
    */
-  virtual PluginParameter* get(const int index) const { return parameterList.at(index); }
+  virtual Parameter * get(const int index) const { return parameterList.at(index); }
   /**
    * Lookup a parameter by name, for example: parameterSet["foo"]
    *
    * @param name The parameter's name
    * @return Reference to parameter, or NULL if not found
    */
-  virtual PluginParameter* operator[](const ParameterString& name) const { return get(name); }
+  virtual Parameter * operator[](const ParameterString& name) const { return get(name); }
   /**
    * Lookup a parameter by name
    *
    * @param name The parameter's name
    * @return Reference to parameter, or NULL if not found
    */
-  virtual PluginParameter* get(const ParameterString& name) const {
-    ParameterMap::const_iterator iterator = parameterMap.find(PluginParameter::makeSafeName(name));
+  virtual Parameter * get(const ParameterString& name) const {
+    ParameterMap::const_iterator iterator = parameterMap.find(Parameter::makeSafeName(name));
     return (iterator != parameterMap.end()) ? iterator->second : NULL;
   }
 
 protected:
-  typedef std::map<ParameterString, PluginParameter*> ParameterMap;
-  typedef std::vector<PluginParameter*> ParameterList;
+  typedef std::map<ParameterString, Parameter *> ParameterMap;
+  typedef std::vector<Parameter *> ParameterList;
 
   ParameterMap parameterMap;
   ParameterList parameterList;

@@ -26,13 +26,13 @@
 #ifndef __StringParameter_h__
 #define __StringParameter_h__
 
-#include "PluginParameter.h"
+#include "Parameter.h"
 
 namespace teragon {
-class StringParameter : public PluginParameter {
+class StringParameter : public Parameter {
 public:
   explicit StringParameter(ParameterString inName, ParameterString inDefaultValue = "") :
-  PluginParameter(inName), value(inDefaultValue) {}
+  Parameter(inName), value(inDefaultValue) {}
   virtual ~StringParameter() {}
 
   virtual const ParameterString getDisplayText() const { return value; }
@@ -50,7 +50,7 @@ public:
 protected:
 #endif
   virtual void setScaledValue(const ParameterValue inValue) { setValue(inValue); }
-  virtual void setValue(const ParameterValue inValue) { PluginParameter::setValue(inValue); }
+  virtual void setValue(const ParameterValue inValue) { Parameter::setValue(inValue); }
   virtual void setValue(const ParameterString inValue) {
     value = inValue;
     notifyObservers();

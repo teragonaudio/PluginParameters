@@ -35,7 +35,7 @@ typedef double ParameterValue;
 
 static const int kDefaultDisplayPrecision = 1;
 
-class PluginParameter;
+class Parameter;
 class ParameterObserver {
 public:
   ParameterObserver() {}
@@ -48,18 +48,18 @@ public:
   /**
    * Method to be called when a parameter's value has been updated.
    */
-  virtual void onParameterUpdated(const PluginParameter* parameter) = 0;
+  virtual void onParameterUpdated(const Parameter* parameter) = 0;
 };
 typedef std::vector<ParameterObserver *> ParameterObserverMap;
 
-class PluginParameter {
+class Parameter {
 public:
   /**
    * Create a new parameter with defaults for the minimum and maximum values.
    *
    * @param inName The parameter name
    */
-  PluginParameter(ParameterString inName) :
+  Parameter(ParameterString inName) :
     name(inName), minValue(0.0), maxValue(1.0), defaultValue(0.0), value(0.0),
     type(0), precision(kDefaultDisplayPrecision) {}
 
@@ -81,11 +81,11 @@ public:
     * operates under the assumption that you are not insane and choose sensible
     * values for the minimum, maximum, and default values.
     */
-  PluginParameter(ParameterString inName, ParameterValue inMinValue,
+  Parameter(ParameterString inName, ParameterValue inMinValue,
   ParameterValue inMaxValue, ParameterValue inDefaultValue) :
     name(inName), minValue(inMinValue), maxValue(inMaxValue), defaultValue(inDefaultValue),
     value(inDefaultValue), type(0), precision(kDefaultDisplayPrecision) {}
-  virtual ~PluginParameter() {}
+  virtual ~Parameter() {}
 
   /**
    * @return The parameter's display name
@@ -278,7 +278,7 @@ private:
   // Disallow assignment operator. It doesn't really make sense to try
   // to assign one parameter to another, and if this is allowed then we
   // must drop the const several fields.
-  PluginParameter& operator=(const PluginParameter&) { return *this; }
+  Parameter & operator=(const Parameter &) { return *this; }
 
 private:
   ParameterString name;

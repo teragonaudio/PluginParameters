@@ -30,7 +30,7 @@
 #include "readerwriterqueue/readerwriterqueue.h"
 #include "tinythread/source/tinythread.h"
 #include "Event.h"
-#include "PluginParameter.h"
+#include "Parameter.h"
 
 namespace teragon {
 

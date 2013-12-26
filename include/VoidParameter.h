@@ -32,9 +32,9 @@ namespace teragon {
  * always 0, regardless of whether setValue() is called.
  * This parameter type is mostly useful to send events between observers.
  */
-class VoidParameter : public PluginParameter {
+class VoidParameter : public Parameter {
 public:
-  explicit VoidParameter(ParameterString inName) : PluginParameter(inName) {}
+  explicit VoidParameter(ParameterString inName) : Parameter(inName) {}
   virtual ~VoidParameter() {}
 
   virtual const ParameterString getDisplayText() const { return "Triggered"; }

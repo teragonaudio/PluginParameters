@@ -28,7 +28,7 @@
 
 #if ENABLE_MULTITHREADED
 #include "PluginParameterSet.h"
-#include "PluginParameters.h"
+#include "Parameter.h"
 #include "EventDispatcher.h"
 
 #if HAVE_TESTRUNNER
@@ -114,7 +114,7 @@ public:
 
   /**
    * Set a parameter's value. When ENABLE_MULTITHREADED is set, then this method
-   * must be used rather than PluginParameter::set(). The actual operation will
+   * must be used rather than Parameter::set(). The actual operation will
    * be redispatched to the main thread and executed there, and any async
    * observers will be notified afterwards. This means that there can be some
    * small delay before other async observers receive their notifications.
@@ -128,7 +128,7 @@ public:
    */
   virtual void set(const ParameterString& name, const ParameterValue value,
     ParameterObserver* sender = NULL) {
-    PluginParameter* parameter = get(name);
+    Parameter* parameter = get(name);
     if(parameter != NULL) {
       set(parameter, value, sender);
     }
@@ -136,7 +136,7 @@ public:
 
   /**
    * Set a parameter's value. When ENABLE_MULTITHREADED is set, then this method
-   * must be used rather than PluginParameter::set(). The actual operation will
+   * must be used rather than Parameter::set(). The actual operation will
    * be redispatched to the main thread and executed there, and any async
    * observers will be notified afterwards. This means that there can be some
    * small delay before other async observers receive their notifications.
@@ -155,7 +155,7 @@ public:
 
   /**
    * Set a parameter's value. When ENABLE_MULTITHREADED is set, then this method
-   * must be used rather than PluginParameter::set(). The actual operation will
+   * must be used rather than Parameter::set(). The actual operation will
    * be redispatched to the main thread and executed there, and any async
    * observers will be notified afterwards. This means that there can be some
    * small delay before other async observers receive their notifications.
@@ -167,14 +167,14 @@ public:
    *               since presumably this object is pushing state to other
    *               observers.
    */
-  virtual void set(PluginParameter* parameter, const ParameterValue value,
+  virtual void set(Parameter* parameter, const ParameterValue value,
     ParameterObserver* sender = NULL) {
     scheduleEvent(new Event(parameter, value, true, sender));
   }
 
   /**
    * Set a parameter's value. When ENABLE_MULTITHREADED is set, then this method
-   * must be used rather than PluginParameter::set(). The actual operation will
+   * must be used rather than Parameter::set(). The actual operation will
    * be redispatched to the main thread and executed there, and any async
    * observers will be notified afterwards. This means that there can be some
    * small delay before other async observers receive their notifications.
@@ -188,7 +188,7 @@ public:
    */
   virtual void setScaled(const ParameterString& name, const ParameterValue value,
     ParameterObserver* sender = NULL) {
-    PluginParameter* parameter = get(name);
+    Parameter* parameter = get(name);
     if(parameter != NULL) {
       setScaled(parameter, value, sender);
     }
@@ -196,7 +196,7 @@ public:
 
   /**
    * Set a parameter's value. When ENABLE_MULTITHREADED is set, then this method
-   * must be used rather than PluginParameter::set(). The actual operation will
+   * must be used rather than Parameter::set(). The actual operation will
    * be redispatched to the main thread and executed there, and any async
    * observers will be notified afterwards. This means that there can be some
    * small delay before other async observers receive their notifications.
@@ -215,7 +215,7 @@ public:
 
   /**
    * Set a parameter's value. When ENABLE_MULTITHREADED is set, then this method
-   * must be used rather than PluginParameter::set(). The actual operation will
+   * must be used rather than Parameter::set(). The actual operation will
    * be redispatched to the main thread and executed there, and any async
    * observers will be notified afterwards. This means that there can be some
    * small delay before other async observers receive their notifications.
@@ -227,15 +227,15 @@ public:
    *               since presumably this object is pushing state to other
    *               observers.
    */
-  virtual void setScaled(PluginParameter* parameter, const ParameterValue value,
+  virtual void setScaled(Parameter* parameter, const ParameterValue value,
     ParameterObserver* sender = NULL) {
     scheduleEvent(new ScaledEvent(parameter, value, true, sender));
   }
 
-  // TODO: Should disappear with templated version of PluginParameter
+  // TODO: Should disappear with templated version of Parameter
   /**
    * Set a parameter's value. When ENABLE_MULTITHREADED is set, then this method
-   * must be used rather than PluginParameter::set(). The actual operation will
+   * must be used rather than Parameter::set(). The actual operation will
    * be redispatched to the main thread and executed there, and any async
    * observers will be notified afterwards. This means that there can be some
    * small delay before other async observers receive their notifications.
@@ -249,16 +249,16 @@ public:
    */
   virtual void set(const ParameterString& name, const ParameterString value,
     ParameterObserver* sender = NULL) {
-    PluginParameter* parameter = get(name);
+    Parameter* parameter = get(name);
     if(parameter != NULL) {
       set(parameter, value, sender);
     }
   }
 
-  // TODO: Should disappear with templated version of PluginParameter
+  // TODO: Should disappear with templated version of Parameter
   /**
    * Set a parameter's value. When ENABLE_MULTITHREADED is set, then this method
-   * must be used rather than PluginParameter::set(). The actual operation will
+   * must be used rather than Parameter::set(). The actual operation will
    * be redispatched to the main thread and executed there, and any async
    * observers will be notified afterwards. This means that there can be some
    * small delay before other async observers receive their notifications.
@@ -275,10 +275,10 @@ public:
     return set(parameterList.at(index), value, sender);
   }
 
-  // TODO: Should disappear with templated version of PluginParameter
+  // TODO: Should disappear with templated version of Parameter
   /**
    * Set a parameter's value. When ENABLE_MULTITHREADED is set, then this method
-   * must be used rather than PluginParameter::set(). The actual operation will
+   * must be used rather than Parameter::set(). The actual operation will
    * be redispatched to the main thread and executed there, and any async
    * observers will be notified afterwards. This means that there can be some
    * small delay before other async observers receive their notifications.
@@ -290,7 +290,7 @@ public:
    *               since presumably this object is pushing state to other
    *               observers.
    */
-  virtual void set(PluginParameter* parameter, const ParameterString value,
+  virtual void set(Parameter* parameter, const ParameterString value,
     ParameterObserver* sender = NULL) {
     StringParameter* stringParameter = dynamic_cast<StringParameter*>(parameter);
     if(stringParameter != NULL) {

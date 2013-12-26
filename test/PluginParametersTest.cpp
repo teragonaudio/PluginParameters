@@ -48,7 +48,7 @@ class TestObserver : public ParameterObserver {
 public:
   TestObserver() : ParameterObserver(), notified(false) {}
   bool isRealtimePriority() const { return true; }
-  void onParameterUpdated(const PluginParameter* parameter) {
+  void onParameterUpdated(const Parameter * parameter) {
     notified = true;
   }
   bool notified;
@@ -60,7 +60,7 @@ public:
     realtime(isRealtime), count(0) {}
   virtual ~TestCounterObserver() {}
   bool isRealtimePriority() const { return realtime; }
-  virtual void onParameterUpdated(const PluginParameter* parameter) {
+  virtual void onParameterUpdated(const Parameter * parameter) {
     count++;
   }
   const bool realtime;
@@ -71,7 +71,7 @@ class TestCacheValueObserver : public TestCounterObserver {
 public:
   TestCacheValueObserver(bool isRealtime = true) : TestCounterObserver(isRealtime), value(0) {}
   virtual ~TestCacheValueObserver() {}
-  virtual void onParameterUpdated(const PluginParameter* parameter) {
+  virtual void onParameterUpdated(const Parameter * parameter) {
     TestCounterObserver::onParameterUpdated(parameter);
     value = parameter->getValue();
   }
@@ -83,7 +83,7 @@ public:
   BooleanParameterObserver() : ParameterObserver(), value(false) {}
   virtual ~BooleanParameterObserver() {}
   bool isRealtimePriority() const { return true; }
-  void onParameterUpdated(const PluginParameter *parameter) {
+  void onParameterUpdated(const Parameter *parameter) {
     value = parameter->getValue();
   }
   bool value;
@@ -94,7 +94,7 @@ public:
   StringParameterObserver() : ParameterObserver(), value("") {}
   virtual ~StringParameterObserver() {}
   bool isRealtimePriority() const { return true; }
-  void onParameterUpdated(const PluginParameter* parameter) {
+  void onParameterUpdated(const Parameter * parameter) {
     value = parameter->getDisplayText();
   }
   ParameterString value;
@@ -284,8 +284,8 @@ static bool testCreateParameterSet() {
 
 static bool testAddParameterToSet() {
   PluginParameterSet s;
-  PluginParameter* _p1;
-  PluginParameter* _p2;
+  Parameter * _p1;
+  Parameter * _p2;
 
   _p1 = s.add(new BooleanParameter("Parameter 1"));
   ASSERT_NOT_NULL(_p1);
@@ -338,7 +338,7 @@ static bool testGetParameterByName() {
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 1")));
   ASSERT_NOT_NULL(s.add(new BooleanParameter("Parameter 2")));
   ASSERT_INT_EQUALS(2, s.size());
-  PluginParameter *pe = s.get("Parameter 2");
+  Parameter *pe = s.get("Parameter 2");
   ASSERT_NOT_NULL(pe);
   ASSERT_STRING("Parameter 2", pe->getName());
   return true;
@@ -473,7 +473,7 @@ static bool testCreateManyThreadsafeParameterSets() {
 
 static bool testThreadsafeSetParameterRealtime() {
   ThreadsafePluginParameterSet s;
-  PluginParameter *p = s.add(new BooleanParameter("test"));
+  Parameter *p = s.add(new BooleanParameter("test"));
   ASSERT_NOT_NULL(p);
   ASSERT_FALSE(p->getValue());
   s.set(p, true);
@@ -484,7 +484,7 @@ static bool testThreadsafeSetParameterRealtime() {
 
 static bool testThreadsafeSetParameterAsync() {
   ThreadsafePluginParameterSet s;
-  PluginParameter *p = s.add(new BooleanParameter("test"));
+  Parameter *p = s.add(new BooleanParameter("test"));
   ASSERT_NOT_NULL(p);
   ASSERT_FALSE(p->getValue());
   s.set(p, true);
@@ -500,7 +500,7 @@ static bool testThreadsafeSetParameterBothThreadsFromAsync() {
   ThreadsafePluginParameterSet s;
   TestCacheValueObserver realtimeObserver(true);
   TestCacheValueObserver asyncObserver(false);
-  PluginParameter *p = s.add(new BooleanParameter("test"));
+  Parameter *p = s.add(new BooleanParameter("test"));
   ASSERT_NOT_NULL(p);
   p->addObserver(&realtimeObserver);
   p->addObserver(&asyncObserver);
@@ -522,7 +522,7 @@ static bool testThreadsafeSetParameterBothThreadsFromRealtime() {
   ThreadsafePluginParameterSet s;
   TestCounterObserver realtimeObserver(true);
   TestCounterObserver asyncObserver(false);
-  PluginParameter *p = s.add(new BooleanParameter("test"));
+  Parameter *p = s.add(new BooleanParameter("test"));
   ASSERT_NOT_NULL(p);
   p->addObserver(&realtimeObserver);
   p->addObserver(&asyncObserver);
@@ -542,7 +542,7 @@ static bool testThreadsafeSetParameterWithSender() {
   ThreadsafePluginParameterSet s;
   TestCounterObserver realtimeObserver(true);
   TestCounterObserver asyncObserver(false);
-  PluginParameter *p = s.add(new BooleanParameter("test"));
+  Parameter *p = s.add(new BooleanParameter("test"));
   ASSERT_NOT_NULL(p);
   p->addObserver(&realtimeObserver);
   p->addObserver(&asyncObserver);
