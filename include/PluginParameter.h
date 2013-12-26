@@ -36,10 +36,10 @@ typedef double ParameterValue;
 static const int kDefaultDisplayPrecision = 1;
 
 class PluginParameter;
-class PluginParameterObserver {
+class ParameterObserver {
 public:
-  PluginParameterObserver() {}
-  virtual ~PluginParameterObserver() {}
+  ParameterObserver() {}
+  virtual ~ParameterObserver() {}
 
 #if ENABLE_MULTITHREADED
   virtual bool isRealtimePriority() const = 0;
@@ -50,7 +50,7 @@ public:
    */
   virtual void onParameterUpdated(const PluginParameter* parameter) = 0;
 };
-typedef std::vector<PluginParameterObserver*> ParameterObserverMap;
+typedef std::vector<ParameterObserver *> ParameterObserverMap;
 
 class PluginParameter {
 public:
@@ -227,11 +227,11 @@ public:
    *
    * @param observer Pointer to observing instance
    */
-  virtual void addObserver(PluginParameterObserver* observer) {
+  virtual void addObserver(ParameterObserver * observer) {
     observers.push_back(observer);
   }
 
-  virtual PluginParameterObserver* getObserver(const unsigned int index) const {
+  virtual ParameterObserver * getObserver(const unsigned int index) const {
     return index < observers.size() ? observers.at(index) : NULL;
   }
 
@@ -244,7 +244,7 @@ public:
    *
    * @param observer Instance to remove
    */
-  virtual void removeObserver(PluginParameterObserver* observer) {
+  virtual void removeObserver(ParameterObserver * observer) {
     ParameterObserverMap::iterator iterator = observers.begin();
     while(iterator != observers.end() && observers.size() > 0) {
       if(*iterator == observer) {

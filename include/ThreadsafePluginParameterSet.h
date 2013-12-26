@@ -127,7 +127,7 @@ public:
    *               observers.
    */
   virtual void set(const ParameterString& name, const ParameterValue value,
-    PluginParameterObserver* sender = NULL) {
+    ParameterObserver* sender = NULL) {
     PluginParameter* parameter = get(name);
     if(parameter != NULL) {
       set(parameter, value, sender);
@@ -149,7 +149,7 @@ public:
    *               observers.
    */
   virtual void set(const int index, const ParameterValue value,
-    PluginParameterObserver* sender = NULL) {
+    ParameterObserver* sender = NULL) {
     return set(parameterList.at(index), value, sender);
   }
 
@@ -168,7 +168,7 @@ public:
    *               observers.
    */
   virtual void set(PluginParameter* parameter, const ParameterValue value,
-    PluginParameterObserver* sender = NULL) {
+    ParameterObserver* sender = NULL) {
     scheduleEvent(new Event(parameter, value, true, sender));
   }
 
@@ -187,7 +187,7 @@ public:
    *               observers.
    */
   virtual void setScaled(const ParameterString& name, const ParameterValue value,
-    PluginParameterObserver* sender = NULL) {
+    ParameterObserver* sender = NULL) {
     PluginParameter* parameter = get(name);
     if(parameter != NULL) {
       setScaled(parameter, value, sender);
@@ -209,7 +209,7 @@ public:
    *               observers.
    */
   virtual void setScaled(const int index, const ParameterValue value,
-    PluginParameterObserver* sender = NULL) {
+    ParameterObserver* sender = NULL) {
     return setScaled(parameterList.at(index), value, sender);
   }
 
@@ -228,7 +228,7 @@ public:
    *               observers.
    */
   virtual void setScaled(PluginParameter* parameter, const ParameterValue value,
-    PluginParameterObserver* sender = NULL) {
+    ParameterObserver* sender = NULL) {
     scheduleEvent(new ScaledEvent(parameter, value, true, sender));
   }
 
@@ -248,7 +248,7 @@ public:
    *               observers.
    */
   virtual void set(const ParameterString& name, const ParameterString value,
-    PluginParameterObserver* sender = NULL) {
+    ParameterObserver* sender = NULL) {
     PluginParameter* parameter = get(name);
     if(parameter != NULL) {
       set(parameter, value, sender);
@@ -271,7 +271,7 @@ public:
    *               observers.
    */
   virtual void set(const int index, const ParameterString value,
-    PluginParameterObserver* sender = NULL) {
+    ParameterObserver* sender = NULL) {
     return set(parameterList.at(index), value, sender);
   }
 
@@ -291,7 +291,7 @@ public:
    *               observers.
    */
   virtual void set(PluginParameter* parameter, const ParameterString value,
-    PluginParameterObserver* sender = NULL) {
+    ParameterObserver* sender = NULL) {
     StringParameter* stringParameter = dynamic_cast<StringParameter*>(parameter);
     if(stringParameter != NULL) {
       scheduleEvent(new StringEvent(stringParameter, value, true, sender));

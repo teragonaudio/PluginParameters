@@ -35,7 +35,7 @@ namespace teragon {
 class Event {
 public:
   Event(PluginParameter* p, ParameterValue v,
-    bool realtime = false, PluginParameterObserver* s = NULL) :
+    bool realtime = false, ParameterObserver* s = NULL) :
     parameter(p), value(v), isRealtime(realtime), sender(s) {}
   virtual ~Event() {}
 
@@ -44,7 +44,7 @@ public:
   PluginParameter* parameter;
   const ParameterValue value;
   bool isRealtime;
-  const PluginParameterObserver* sender;
+  const ParameterObserver* sender;
 
 private:
   // Disallow assignment operator
@@ -54,7 +54,7 @@ private:
 class ScaledEvent : public Event {
 public:
   ScaledEvent(PluginParameter* p, ParameterValue v,
-    bool realtime = false, PluginParameterObserver* s = NULL) :
+    bool realtime = false, ParameterObserver* s = NULL) :
   Event(p, v, realtime, s) {}
   virtual ~ScaledEvent() {}
 
@@ -64,7 +64,7 @@ public:
 class StringEvent : public Event {
 public:
   StringEvent(StringParameter* p, ParameterString v,
-    bool realtime = false, PluginParameterObserver* s = NULL) :
+    bool realtime = false, ParameterObserver* s = NULL) :
   Event(dynamic_cast<PluginParameter*>(p), 0, realtime, s),
     stringParameter(p), stringValue(v) {}
   virtual ~StringEvent() {}

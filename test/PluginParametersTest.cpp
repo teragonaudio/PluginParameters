@@ -44,9 +44,9 @@ namespace teragon {
 // Observers
 ////////////////////////////////////////////////////////////////////////////////
 
-class TestObserver : public PluginParameterObserver {
+class TestObserver : public ParameterObserver {
 public:
-  TestObserver() : PluginParameterObserver(), notified(false) {}
+  TestObserver() : ParameterObserver(), notified(false) {}
   bool isRealtimePriority() const { return true; }
   void onParameterUpdated(const PluginParameter* parameter) {
     notified = true;
@@ -54,9 +54,9 @@ public:
   bool notified;
 };
 
-class TestCounterObserver : public PluginParameterObserver {
+class TestCounterObserver : public ParameterObserver {
 public:
-  TestCounterObserver(bool isRealtime = true) : PluginParameterObserver(),
+  TestCounterObserver(bool isRealtime = true) : ParameterObserver(),
     realtime(isRealtime), count(0) {}
   virtual ~TestCounterObserver() {}
   bool isRealtimePriority() const { return realtime; }
@@ -78,9 +78,9 @@ public:
   ParameterValue value;
 };
 
-class BooleanParameterObserver : public PluginParameterObserver {
+class BooleanParameterObserver : public ParameterObserver {
 public:
-  BooleanParameterObserver() : PluginParameterObserver(), value(false) {}
+  BooleanParameterObserver() : ParameterObserver(), value(false) {}
   virtual ~BooleanParameterObserver() {}
   bool isRealtimePriority() const { return true; }
   void onParameterUpdated(const PluginParameter *parameter) {
@@ -89,9 +89,9 @@ public:
   bool value;
 };
 
-class StringParameterObserver : public PluginParameterObserver {
+class StringParameterObserver : public ParameterObserver {
 public:
-  StringParameterObserver() : PluginParameterObserver(), value("") {}
+  StringParameterObserver() : ParameterObserver(), value("") {}
   virtual ~StringParameterObserver() {}
   bool isRealtimePriority() const { return true; }
   void onParameterUpdated(const PluginParameter* parameter) {
