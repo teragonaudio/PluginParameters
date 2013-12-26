@@ -54,8 +54,6 @@ public:
         return dataSize;
     }
 
-    virtual void setScaledValue(const ParameterValue value) {}
-
     virtual void setValue(const void *inData, const size_t inDataSize) {
         if(inData == NULL || inDataSize == 0) {
             return;
@@ -68,6 +66,11 @@ public:
         dataSize = inDataSize;
         memcpy(data, inData, inDataSize);
     }
+
+    // An implementation for these methods is provided, but they should not
+    // be used in practice.
+    virtual void setScaledValue(const ParameterValue value) {}
+    virtual void setValue(const ParameterValue inValue) {}
 
 private:
     void *data;

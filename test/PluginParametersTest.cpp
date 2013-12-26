@@ -95,6 +95,39 @@ public:
 
 class _Tests {
 public:
+    static bool testCreateBlobParameter() {
+        BlobParameter p("test");
+        ASSERT_FALSE(p.getValue());
+        ASSERT_IS_NULL(p.getData());
+        ASSERT_SIZE_EQUALS((size_t)0, p.getDataSize());
+        ASSERT_STRING("test", p.getName());
+        ASSERT_STRING("(Null)", p.getDisplayText());
+        ASSERT_STRING("test", p.getSafeName());
+        return true;
+    }
+
+    static bool testSetBlobParameter() {
+        BlobParameter p("test");
+        ASSERT_IS_NULL(p.getData());
+        ASSERT_SIZE_EQUALS((size_t)0, p.getDataSize());
+        // Make some test data, with lots of null chars inside of it
+        unsigned char testData[100];
+        for(size_t i = 0; i < sizeof(testData); ++i) {
+            testData[i] = (unsigned char)(i % 10);
+        }
+
+        p.setValue(testData, sizeof(testData));
+
+        ASSERT_NOT_NULL(p.getData());
+        ASSERT_SIZE_EQUALS(100ul, p.getDataSize());
+        ASSERT_STRING("(Data)", p.getDisplayText());
+        unsigned char* result = (unsigned char*)p.getData();
+        for(size_t i = 0; i < p.getDataSize(); ++i) {
+            ASSERT_INT_EQUALS(result[i], (int)(i % 10));
+        }
+        return true;
+    }
+
     static bool testCreateBoolParameter() {
         BooleanParameter p("test");
         ASSERT_FALSE(p.getValue());
@@ -442,6 +475,9 @@ using namespace teragon;
 
 int main(int argc, char *argv[]) {
     gNumFailedTests = 0;
+
+    ADD_TEST(_Tests::testCreateBlobParameter());
+    ADD_TEST(_Tests::testSetBlobParameter());
 
     ADD_TEST(_Tests::testCreateBoolParameter());
     ADD_TEST(_Tests::testSetBoolParameter());

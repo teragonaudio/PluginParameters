@@ -30,6 +30,7 @@
 #define PLUGINPARAMETERS_MULTITHREADED 1
 #endif
 
+#include "BlobParameter.h"
 #include "BooleanParameter.h"
 #include "DecibelParameter.h"
 #include "FloatParameter.h"
