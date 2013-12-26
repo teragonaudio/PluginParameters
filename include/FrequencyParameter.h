@@ -34,8 +34,10 @@ namespace teragon {
 
 class FrequencyParameter : public Parameter {
 public:
-    explicit FrequencyParameter(ParameterString inName, ParameterValue inMinValue,
-                                ParameterValue inMaxValue, ParameterValue inDefaultValue) :
+    FrequencyParameter(const ParameterString &inName,
+                       ParameterValue inMinValue,
+                       ParameterValue inMaxValue,
+                       ParameterValue inDefaultValue) :
     Parameter(inName, inMinValue, inMaxValue, inDefaultValue) {
         logMinValue = log(inMinValue);
         range = log(inMaxValue) - log(inMinValue);

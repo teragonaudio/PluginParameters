@@ -33,9 +33,10 @@ namespace teragon {
 
 class IntegerParameter : public FloatParameter {
 public:
-    explicit IntegerParameter(ParameterString inName,
-                              int inMinValue, int inMaxValue,
-                              int inDefaultValue) :
+    IntegerParameter(const ParameterString &inName,
+                     int inMinValue,
+                     int inMaxValue,
+                     int inDefaultValue) :
     FloatParameter(inName, (ParameterValue)inMinValue,
                    (ParameterValue)inMaxValue,
                    (ParameterValue)inDefaultValue) {}

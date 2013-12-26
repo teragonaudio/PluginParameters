@@ -35,7 +35,7 @@ namespace teragon {
 */
 class DataParameter : public Parameter {
 public:
-    explicit DataParameter(ParameterString inName) : Parameter(inName, 0.0, 1.0, 0.0) {}
+    DataParameter(const ParameterString &inName) : Parameter(inName, 0.0, 1.0, 0.0) {}
     virtual ~DataParameter() {}
 
     virtual const ParameterValue getScaledValue() const {

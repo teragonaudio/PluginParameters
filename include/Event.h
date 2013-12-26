@@ -33,8 +33,8 @@ namespace teragon {
 
 class Event {
 public:
-    Event(Parameter *p, ParameterValue v,
-          bool realtime = false, ParameterObserver *s = NULL) :
+    Event(Parameter *p, const ParameterValue v,
+          bool realtime = false, const ParameterObserver *s = NULL) :
     parameter(p), value(v), isRealtime(realtime), sender(s) {}
 
     virtual ~Event() {}
@@ -57,8 +57,8 @@ private:
 
 class ScaledEvent : public Event {
 public:
-    ScaledEvent(Parameter *p, ParameterValue v,
-                bool realtime = false, ParameterObserver *s = NULL) :
+    ScaledEvent(Parameter *p, const ParameterValue v,
+                bool realtime = false, const ParameterObserver *s = NULL) :
     Event(p, v, realtime, s) {}
 
     virtual ~ScaledEvent() {}
@@ -71,7 +71,7 @@ public:
 class DataEvent : public Event {
 public:
     DataEvent(DataParameter *p, const void *inData, const size_t inDataSize,
-              bool realtime = false, ParameterObserver *s = NULL) :
+              bool realtime = false, const ParameterObserver *s = NULL) :
     Event(dynamic_cast<Parameter *>(p), 0, realtime, s),
     dataParameter(p), dataValue(NULL), dataSize(inDataSize) {
         if(inDataSize > 0 && inData != NULL) {

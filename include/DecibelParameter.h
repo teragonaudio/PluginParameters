@@ -39,8 +39,10 @@ public:
      * represents its value internally as a *linear* value. If you actually need
      * this value in decibels, see the convertLinearToDecibels() method.
      */
-    explicit DecibelParameter(ParameterString inName, ParameterValue inMinValue,
-                              ParameterValue inMaxValue, ParameterValue inDefaultValue) :
+    DecibelParameter(const ParameterString &inName,
+                     ParameterValue inMinValue,
+                     ParameterValue inMaxValue,
+                     ParameterValue inDefaultValue) :
     FloatParameter(inName, convertDecibelsToLinear(inMinValue),
                    convertDecibelsToLinear(inMaxValue),
                    convertDecibelsToLinear(inDefaultValue)) {

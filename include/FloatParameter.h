@@ -33,8 +33,10 @@ namespace teragon {
 
 class FloatParameter : public Parameter {
 public:
-    explicit FloatParameter(ParameterString inName, ParameterValue inMinValue,
-                            ParameterValue inMaxValue, ParameterValue inDefaultValue) :
+    FloatParameter(const ParameterString &inName,
+                   ParameterValue inMinValue,
+                   ParameterValue inMaxValue,
+                   ParameterValue inDefaultValue) :
     Parameter(inName, inMinValue, inMaxValue, inDefaultValue) {
         range = inMaxValue - inMinValue;
     }

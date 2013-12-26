@@ -62,7 +62,7 @@ public:
      *
      * @param inName The parameter name
      */
-    Parameter(ParameterString inName) :
+    Parameter(const ParameterString &inName) :
     name(inName), minValue(0.0), maxValue(1.0), defaultValue(0.0), value(0.0),
     type(0), precision(kDefaultDisplayPrecision) {}
 
@@ -84,8 +84,10 @@ public:
       * operates under the assumption that you are not insane and choose sensible
       * values for the minimum, maximum, and default values.
       */
-    Parameter(ParameterString inName, ParameterValue inMinValue,
-              ParameterValue inMaxValue, ParameterValue inDefaultValue) :
+    Parameter(const ParameterString &inName,
+              ParameterValue inMinValue,
+              ParameterValue inMaxValue,
+              ParameterValue inDefaultValue) :
     name(inName), minValue(inMinValue), maxValue(inMaxValue), defaultValue(inDefaultValue),
     value(inDefaultValue), type(0), precision(kDefaultDisplayPrecision) {}
 
@@ -312,7 +314,7 @@ private:
     }
 
 private:
-    ParameterString name;
+    const ParameterString name;
     ParameterString unit;
     const ParameterValue minValue;
     const ParameterValue maxValue;

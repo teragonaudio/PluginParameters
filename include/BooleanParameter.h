@@ -32,8 +32,7 @@ namespace teragon {
 
 class BooleanParameter : public Parameter {
 public:
-    explicit BooleanParameter(ParameterString inName,
-                              bool inDefaultValue = false) :
+    BooleanParameter(const ParameterString &inName, bool inDefaultValue = false) :
     Parameter(inName), value(inDefaultValue) {}
 
     virtual ~BooleanParameter() {}

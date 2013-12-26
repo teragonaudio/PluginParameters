@@ -35,7 +35,7 @@ namespace teragon {
  */
 class VoidParameter : public Parameter {
 public:
-    explicit VoidParameter(ParameterString inName) : Parameter(inName) {}
+    VoidParameter(const ParameterString &inName) : Parameter(inName) {}
 
     virtual ~VoidParameter() {}
 

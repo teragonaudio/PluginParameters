@@ -32,7 +32,8 @@ namespace teragon {
 
 class StringParameter : public DataParameter {
 public:
-    explicit StringParameter(ParameterString inName, ParameterString inDefaultValue = "") :
+    StringParameter(const ParameterString &inName,
+                    ParameterString inDefaultValue = "") :
     DataParameter(inName), stringValue(inDefaultValue) {}
 
     virtual ~StringParameter() {}
