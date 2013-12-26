@@ -68,21 +68,22 @@ public:
     }
 };
 
-class StringEvent : public Event {
+class DataEvent : public Event {
 public:
-    StringEvent(StringParameter *p, ParameterString v,
-                bool realtime = false, ParameterObserver *s = NULL) :
+    DataEvent(DataParameter *p, const void *inData, const size_t inDataSize,
+              bool realtime = false, ParameterObserver *s = NULL) :
     Event(dynamic_cast<Parameter *>(p), 0, realtime, s),
-    stringParameter(p), stringValue(v) {}
+    dataParameter(p), dataValue(inData), dataSize(inDataSize) {}
 
-    virtual ~StringEvent() {}
+    virtual ~DataEvent() {}
 
     virtual void apply() {
-        stringParameter->setValue(stringValue);
+        dataParameter->setValue(dataValue, dataSize);
     }
 
-    StringParameter *stringParameter;
-    const ParameterString stringValue;
+    DataParameter *dataParameter;
+    const void *dataValue;
+    const size_t dataSize;
 };
 
 } // namespace teragon

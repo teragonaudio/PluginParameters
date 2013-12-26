@@ -125,6 +125,21 @@ public:
         return true;
     }
 
+    static bool testThreadsafeSetDataParameterAsync() {
+        ConcurrentParameterSet s;
+        StringParameter *p = new StringParameter("test");
+        s.add(p);
+        ASSERT_NOT_NULL(p);
+        ASSERT_STRING("", p->getDisplayText());
+        s.setData(p, "hello");
+        while(p->getDisplayText() == "") {
+            s.processRealtimeEvents();
+            usleep(1000 * SLEEP_TIME_PER_BLOCK_MS);
+        }
+        ASSERT_STRING("hello", p->getDisplayText());
+        return true;
+    }
+
     static bool testThreadsafeSetParameterBothThreadsFromAsync() {
         ConcurrentParameterSet s;
         TestCacheValueObserver realtimeObserver(true);
@@ -210,6 +225,7 @@ int main(int argc, char *argv[]) {
         ADD_TEST(_Tests::testCreateConcurrentParameterSet());
         ADD_TEST(_Tests::testCreateManyConcurrentParameterSets());
         ADD_TEST(_Tests::testThreadsafeSetParameterAsync());
+        ADD_TEST(_Tests::testThreadsafeSetDataParameterAsync());
         ADD_TEST(_Tests::testThreadsafeSetParameterRealtime());
         ADD_TEST(_Tests::testThreadsafeSetParameterBothThreadsFromAsync());
         ADD_TEST(_Tests::testThreadsafeSetParameterBothThreadsFromRealtime());

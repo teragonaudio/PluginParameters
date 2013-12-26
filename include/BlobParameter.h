@@ -27,24 +27,20 @@
 #define __PluginParameters_BlobParameter_h__
 
 #include <stdlib.h>
-#include "Parameter.h"
+#include "DataParameter.h"
 
 namespace teragon {
 
-class BlobParameter : public Parameter {
+class BlobParameter : public DataParameter {
 public:
     explicit BlobParameter(ParameterString inName, void *inData = NULL, size_t inDataSize = 0) :
-    Parameter(inName, 0.0, 1.0, 0.0),
+    DataParameter(inName),
     data(inData), dataSize(inDataSize) {}
 
     virtual ~BlobParameter() {}
 
     virtual const ParameterString getDisplayText() const {
         return (data != NULL && dataSize > 0) ? "(Data)" : "(Null)";
-    }
-
-    virtual const ParameterValue getScaledValue() const {
-        return 0.0;
     }
 
     virtual void *getData() const {
@@ -54,6 +50,11 @@ public:
     virtual size_t getDataSize() const {
         return dataSize;
     }
+
+
+#if PLUGINPARAMETERS_MULTITHREADED
+protected:
+#endif
 
     virtual void setValue(const void *inData, const size_t inDataSize) {
         if(inData == NULL || inDataSize == 0) {
@@ -66,12 +67,9 @@ public:
         data = malloc(inDataSize);
         dataSize = inDataSize;
         memcpy(data, inData, inDataSize);
-    }
 
-    // An implementation for these methods is provided, but they should not
-    // be used in practice.
-    virtual void setScaledValue(const ParameterValue value) {}
-    virtual void setValue(const ParameterValue inValue) {}
+        notifyObservers();
+    }
 
 private:
     void *data;

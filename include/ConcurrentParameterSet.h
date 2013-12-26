@@ -230,7 +230,6 @@ public:
         scheduleEvent(new ScaledEvent(parameter, value, true, sender));
     }
 
-    // TODO: Should disappear with templated version of Parameter
     /**
      * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
      * must be used rather than Parameter::set(). The actual operation will
@@ -245,15 +244,14 @@ public:
      *               since presumably this object is pushing state to other
      *               observers.
      */
-    virtual void set(const ParameterString &name, const ParameterString value,
-                     ParameterObserver *sender = NULL) {
+    virtual void setData(const ParameterString &name, const void *data,
+                         const size_t dataSize = 0, ParameterObserver *sender = NULL) {
         Parameter *parameter = get(name);
         if(parameter != NULL) {
-            set(parameter, value, sender);
+            setData(parameter, data, dataSize, sender);
         }
     }
 
-    // TODO: Should disappear with templated version of Parameter
     /**
      * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
      * must be used rather than Parameter::set(). The actual operation will
@@ -268,12 +266,11 @@ public:
      *               since presumably this object is pushing state to other
      *               observers.
      */
-    virtual void set(const int index, const ParameterString value,
-                     ParameterObserver *sender = NULL) {
-        return set(parameterList.at(index), value, sender);
+    virtual void setData(const size_t index, const void *data,
+                         const size_t dataSize = 0, ParameterObserver *sender = NULL) {
+        return setData(parameterList.at(index), data, dataSize, sender);
     }
 
-    // TODO: Should disappear with templated version of Parameter
     /**
      * Set a parameter's value. When PLUGINPARAMETERS_MULTITHREADED is set, then this method
      * must be used rather than Parameter::set(). The actual operation will
@@ -288,11 +285,11 @@ public:
      *               since presumably this object is pushing state to other
      *               observers.
      */
-    virtual void set(Parameter *parameter, const ParameterString value,
-                     ParameterObserver *sender = NULL) {
-        StringParameter *stringParameter = dynamic_cast<StringParameter *>(parameter);
-        if(stringParameter != NULL) {
-            scheduleEvent(new StringEvent(stringParameter, value, true, sender));
+    virtual void setData(Parameter *parameter, const void *data,
+                         const size_t dataSize = 0, ParameterObserver *sender = NULL) {
+        DataParameter *dataParameter = dynamic_cast<DataParameter *>(parameter);
+        if(dataParameter != NULL) {
+            scheduleEvent(new DataEvent(dataParameter, data, dataSize, true, sender));
         }
     }
 
