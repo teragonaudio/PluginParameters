@@ -34,7 +34,7 @@ namespace teragon {
 typedef std::string ParameterString;
 typedef double ParameterValue;
 
-static const int kDefaultDisplayPrecision = 1;
+static const unsigned int kDefaultDisplayPrecision = 1;
 
 class Parameter;
 
@@ -301,7 +301,7 @@ protected:
         return unit;
     }
 
-    virtual const int getDisplayPrecision() const {
+    virtual const unsigned int getDisplayPrecision() const {
         return precision;
     }
 
