@@ -417,14 +417,6 @@ public:
         return true;
     }
 
-    static bool testParameterType() {
-        BooleanParameter p("test");
-        ASSERT_INT_EQUALS(0, p.getType());
-        p.setType(1234);
-        ASSERT_INT_EQUALS(1234, p.getType());
-        return true;
-    }
-
     static bool testGetMinValue() {
         FloatParameter p("test", 0.123, 1.23, 1.00);
         ASSERT_EQUALS(0.123, p.getMinValue());
@@ -519,7 +511,6 @@ int main(int argc, char *argv[]) {
     ADD_TEST(_Tests::testRemoveObserver());
     ADD_TEST(_Tests::testShouldNotNotifyForSameValue());
 
-    ADD_TEST(_Tests::testParameterType());
     ADD_TEST(_Tests::testGetMinValue());
     ADD_TEST(_Tests::testGetMaxValue());
     ADD_TEST(_Tests::testGetDefaultValue());

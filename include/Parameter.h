@@ -64,7 +64,7 @@ public:
      */
     Parameter(const ParameterString &inName) :
     name(inName), minValue(0.0), maxValue(1.0), defaultValue(0.0), value(0.0),
-    type(0), precision(kDefaultDisplayPrecision) {}
+    precision(kDefaultDisplayPrecision) {}
 
     /**
       * Create a new floating point parameter. This is probably the most common
@@ -89,7 +89,7 @@ public:
               ParameterValue inMaxValue,
               ParameterValue inDefaultValue) :
     name(inName), minValue(inMinValue), maxValue(inMaxValue), defaultValue(inDefaultValue),
-    value(inDefaultValue), type(0), precision(kDefaultDisplayPrecision) {}
+    value(inDefaultValue), precision(kDefaultDisplayPrecision) {}
 
     virtual ~Parameter() {}
 
@@ -207,26 +207,6 @@ public:
     }
 
     /**
-     * @parameter Get the parameter's user-defined type
-     */
-    virtual const unsigned int getType() const {
-        return type;
-    }
-
-    /**
-     * Set the parameter's user-defined type. The type can be useful for treating
-     * groups of parameters in a given way, such as parameters which require a GUI
-     * update or a set which is common to a single oscillator in a multi-oscillator
-     * synthesizer. By default, the type is 0. This field is unsigned to make it
-     * easier use with bitfields.
-     *
-     * @param inType Type to set
-     */
-    virtual void setType(unsigned int inType) {
-        this->type = inType;
-    }
-
-    /**
      * Number of floating point digits to be displayed, for parameters which
      * support display precision.
      *
@@ -320,7 +300,6 @@ private:
     const ParameterValue maxValue;
     const ParameterValue defaultValue;
     ParameterValue value;
-    unsigned int type;
     unsigned int precision;
 
     ParameterObserverMap observers;
