@@ -63,7 +63,7 @@ public:
      * @param inName The parameter name
      */
     Parameter(const ParameterString &inName) :
-    name(inName), minValue(0.0), maxValue(1.0), defaultValue(0.0), value(0.0),
+    name(inName), unit(""), minValue(0.0), maxValue(1.0), defaultValue(0.0), value(0.0),
     precision(kDefaultDisplayPrecision) {}
 
     /**
@@ -88,7 +88,7 @@ public:
               ParameterValue inMinValue,
               ParameterValue inMaxValue,
               ParameterValue inDefaultValue) :
-    name(inName), minValue(inMinValue), maxValue(inMaxValue), defaultValue(inDefaultValue),
+    name(inName), unit(""), minValue(inMinValue), maxValue(inMaxValue), defaultValue(inDefaultValue),
     value(inDefaultValue), precision(kDefaultDisplayPrecision) {}
 
     virtual ~Parameter() {}
