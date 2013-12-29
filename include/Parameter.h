@@ -200,20 +200,35 @@ public:
     }
 
     /**
-     * @return Get the parameter's initial default value. Useful for reset.
+     * @return Get the parameter's initial default value. Useful for resetting parameters.
      */
     virtual const ParameterValue getDefaultValue() const {
         return defaultValue;
     }
 
     /**
-     * Number of floating point digits to be displayed, for parameters which
-     * support display precision.
+     * Get the number of decimal places for displaying floating-point parameter values.
+     */
+    virtual const unsigned int getDisplayPrecision() const {
+        return precision;
+    }
+
+    /**
+     * Number of floating point digits to be displayed, for parameters which support
+     * display precision.
      *
      * @param inPrecision Number of decimal digits to display
      */
     virtual void setDisplayPrecision(unsigned int inPrecision) {
         this->precision = inPrecision;
+    }
+
+    /**
+     * Get the unit string for the parameter. This is generally used by getDisplayText(),
+     * and is by default an empty string.
+     */
+    virtual const ParameterString &getUnit() const {
+        return unit;
     }
 
     /**
@@ -235,10 +250,20 @@ public:
         observers.push_back(observer);
     }
 
+    /**
+     * Get a given observer for the parameter.
+     *
+     * @param index Observer to get. If the index is invalid, NULL will be returned.
+     * @return The ParameterObserver, or NULL if the index is out of range.
+     */
     virtual ParameterObserver *getObserver(const size_t index) const {
         return index < observers.size() ? observers.at(index) : NULL;
     }
 
+    /**
+     * Get the total number of observers for the parameter. Useful for iterating over
+     * the list of observers.
+     */
     virtual const size_t getNumObservers() const {
         return observers.size();
     }
@@ -275,14 +300,6 @@ protected:
             (*iterator)->onParameterUpdated(this);
         }
 #endif
-    }
-
-    virtual const ParameterString &getUnit() const {
-        return unit;
-    }
-
-    virtual const unsigned int getDisplayPrecision() const {
-        return precision;
     }
 
 private:
