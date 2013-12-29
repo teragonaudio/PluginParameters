@@ -25,7 +25,9 @@
 
 #include <stdio.h>
 
-// Disable multi-threaded build to directly test parameter functionality
+// Disable multi-threaded build, otherwise Parameter::setValue() is not directly
+// accessible without using a ConcurrentParameterSet. This symbol should be
+// defined before including PluginParameters.h.
 #define PLUGINPARAMETERS_MULTITHREADED 0
 #include "PluginParameters.h"
 #include "TestRunner.h"
@@ -453,6 +455,14 @@ public:
         ASSERT_STRING("0.12346", p.getDisplayText());
         return true;
     }
+
+    static bool testSetParameterDescription() {
+        BooleanParameter p("test");
+        ASSERT_STRING("", p.getDescription());
+        p.setDescription("hello, world!");
+        ASSERT_STRING("hello, world!", p.getDescription());
+        return true;
+    }
 };
 
 } // namespace teragon
@@ -516,6 +526,7 @@ int main(int argc, char *argv[]) {
     ADD_TEST(_Tests::testGetDefaultValue());
     ADD_TEST(_Tests::testSetParameterUnit());
     ADD_TEST(_Tests::testSetPrecision());
+    ADD_TEST(_Tests::testSetParameterDescription());
 
     if(gNumFailedTests > 0) {
         printf("\nFAILED %d tests\n", gNumFailedTests);

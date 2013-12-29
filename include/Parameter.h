@@ -64,7 +64,7 @@ public:
      */
     Parameter(const ParameterString &inName) :
     name(inName), unit(""), minValue(0.0), maxValue(1.0), defaultValue(0.0), value(0.0),
-    precision(kDefaultDisplayPrecision) {}
+    precision(kDefaultDisplayPrecision), description("") {}
 
     /**
       * Create a new floating point parameter. This is probably the most common
@@ -89,7 +89,7 @@ public:
               ParameterValue inMaxValue,
               ParameterValue inDefaultValue) :
     name(inName), unit(""), minValue(inMinValue), maxValue(inMaxValue), defaultValue(inDefaultValue),
-    value(inDefaultValue), precision(kDefaultDisplayPrecision) {}
+    value(inDefaultValue), precision(kDefaultDisplayPrecision), description("") {}
 
     virtual ~Parameter() {}
 
@@ -242,6 +242,23 @@ public:
     }
 
     /**
+     * Get the parameter description, which is a string that describes what the function of
+     * the parameter is. This can be used to provide user-facing help for parameters.
+     */
+    const ParameterString &getDescription() const {
+        return description;
+    }
+
+    /**
+     * Set the parameter's description.
+     *
+     * @param description Parameter description
+     */
+    void setDescription(const ParameterString &inDescription) {
+        this->description = inDescription;
+    }
+
+    /**
      * Add an observer to be alerted any time this parameter is set to a new value.
      *
      * @param observer Pointer to observing instance
@@ -318,6 +335,7 @@ private:
     const ParameterValue defaultValue;
     ParameterValue value;
     unsigned int precision;
+    ParameterString description;
 
     ParameterObserverMap observers;
 };
