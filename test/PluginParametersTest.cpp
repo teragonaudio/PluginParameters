@@ -247,7 +247,7 @@ public:
         StringParameter p("test", "whatever");
         ASSERT_EQUALS(0.0, p.getValue());
         ASSERT_STRING("whatever", p.getDisplayText());
-        p.setValue("something");
+        p.setValue("something", 9);
         ASSERT_STRING("something", p.getDisplayText());
         return true;
     }
@@ -256,7 +256,7 @@ public:
         StringParameter *p = new StringParameter("test", "whatever");
         StringParameterObserver l;
         p->addObserver(&l);
-        p->setValue("something");
+        p->setValue("something", 9);
         ASSERT_STRING("something", l.value);
         delete p;
         return true;

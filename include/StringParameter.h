@@ -46,8 +46,8 @@ public:
 protected:
 #endif
 
-    virtual void setValue(const void *inData, const size_t inDataSize = 0) {
-        stringValue = (const char *)inData;
+    virtual void setValue(const void *inData, const size_t inDataSize) {
+        stringValue.assign((const char *)inData, inDataSize);
         notifyObservers();
     }
 
