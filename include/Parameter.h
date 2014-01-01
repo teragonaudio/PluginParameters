@@ -34,7 +34,7 @@ namespace teragon {
 typedef std::string ParameterString;
 typedef double ParameterValue;
 
-static const unsigned int kDefaultDisplayPrecision = 1;
+static const unsigned int kDefaultDisplayPrecision = 2;
 
 class Parameter;
 
