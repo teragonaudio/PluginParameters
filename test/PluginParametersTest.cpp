@@ -161,21 +161,21 @@ public:
         DecibelParameter p("test", -60.0, 3.0, 0.0);
         ASSERT_EQUALS(0.952381, p.getScaledValue());
         ASSERT_EQUALS(1.0, p.getValue());
-        ASSERT_STRING("0.0 dB", p.getDisplayText());
+        ASSERT_STRING("0.00 dB", p.getDisplayText());
         return true;
     }
 
     static bool testSetDecibelParameter() {
         DecibelParameter p("test", -60.0, 3.0, -10.0);
-        ASSERT_STRING("-10.0 dB", p.getDisplayText());
+        ASSERT_STRING("-10.00 dB", p.getDisplayText());
         p.setValue(1.0);
         ASSERT_EQUALS(0.952381, p.getScaledValue());
         ASSERT_EQUALS(1.0, p.getValue());
-        ASSERT_STRING("0.0 dB", p.getDisplayText());
+        ASSERT_STRING("0.00 dB", p.getDisplayText());
         p.setScaledValue(0.5);
         ASSERT_EQUALS(0.5, p.getScaledValue());
         ASSERT_EQUALS(0.037584, p.getValue());
-        ASSERT_STRING("-28.5 dB", p.getDisplayText());
+        ASSERT_STRING("-28.50 dB", p.getDisplayText());
         return true;
     }
 
@@ -183,7 +183,7 @@ public:
         FloatParameter p("test", 0.0, 50.0, 25.0);
         ASSERT_EQUALS(25.0, p.getValue());
         ASSERT_EQUALS(0.5, p.getScaledValue());
-        ASSERT_STRING("25.0", p.getDisplayText());
+        ASSERT_STRING("25.00", p.getDisplayText());
         return true;
     }
 
@@ -202,7 +202,7 @@ public:
         FrequencyParameter p("test", 20.0, 20000.0, 10000.0);
         ASSERT_EQUALS(10000.0, p.getValue());
         ASSERT_EQUALS(0.899657, p.getScaledValue());
-        ASSERT_STRING("10.0 kHz", p.getDisplayText());
+        ASSERT_STRING("10.00 kHz", p.getDisplayText());
         return true;
     }
 
@@ -439,15 +439,15 @@ public:
 
     static bool testSetParameterUnit() {
         FloatParameter p("test", 0.0, 1.0, 0.0);
-        ASSERT_STRING("0.0", p.getDisplayText());
+        ASSERT_STRING("0.00", p.getDisplayText());
         p.setUnit("foo");
-        ASSERT_STRING("0.0 foo", p.getDisplayText());
+        ASSERT_STRING("0.00 foo", p.getDisplayText());
         return true;
     }
 
     static bool testSetPrecision() {
         FloatParameter p("test", 0.0, 1.0, 0.123456);
-        ASSERT_STRING("0.1", p.getDisplayText());
+        ASSERT_STRING("0.12", p.getDisplayText());
         p.setDisplayPrecision(3);
         ASSERT_STRING("0.123", p.getDisplayText());
         // Rounding!
