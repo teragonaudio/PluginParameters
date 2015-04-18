@@ -85,7 +85,7 @@ static int gNumFailedTests = 0;
 
 #define ASSERT_STRING(expected, result) { \
   std::string e(expected); \
-  if(e.compare(result) != 0) { \
+  if(e != result) { \
     printf("Expected '%s', got '%s'. ", expected, result.c_str()); \
     return false; \
   } \
