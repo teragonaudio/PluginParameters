@@ -26,6 +26,7 @@
 #ifndef __PluginParameters_Event_h__
 #define __PluginParameters_Event_h__
 
+#include <string.h>
 #include "Parameter.h"
 #include "StringParameter.h"
 

@@ -27,6 +27,7 @@
 #define __PluginParameters_BlobParameter_h__
 
 #include <stdlib.h>
+#include <string.h>
 #include "DataParameter.h"
 
 namespace teragon {
